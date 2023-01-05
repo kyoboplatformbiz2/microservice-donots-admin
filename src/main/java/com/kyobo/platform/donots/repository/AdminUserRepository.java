@@ -1,6 +1,6 @@
 package com.kyobo.platform.donots.repository;
 
-import com.kyobo.platform.donots.model.AdminUser;
+import com.kyobo.platform.donots.entity.AdminUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

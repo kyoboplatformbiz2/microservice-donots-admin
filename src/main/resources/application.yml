@@ -3,15 +3,15 @@ server:
 spring :
   datasource:
     driver-class-name: org.postgresql.Driver
-    #url: jdbc:postgresql://localhost:5432/recipe_account
-    url: jdbc:postgresql://localhost:5432/donots_account
+    url: jdbc:postgresql://localhost:5432/recipe_account
+    #url: jdbc:postgresql://localhost:5432/donots_account
     username: kyobo
     password: kyobo11!
     hikari:
       pool-name: jpa-hikari-pool
       maximum-pool-size: 5
-      #jdbc-url: jdbc:postgresql://localhost:5432/recipe_account
-      jdbc-url: jdbc:postgresql://localhost:5432/donots_account
+      jdbc-url: jdbc:postgresql://localhost:5432/recipe_account
+      #jdbc-url: jdbc:postgresql://localhost:5432/donots_account
       username: kyobo
       password: kyobo11!
       driver-class-name: org.postgresql.Driver

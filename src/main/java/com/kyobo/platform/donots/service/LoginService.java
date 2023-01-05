@@ -1,6 +1,6 @@
 package com.kyobo.platform.donots.service;
 
-import com.kyobo.platform.donots.model.AdminUser;
+import com.kyobo.platform.donots.entity.AdminUser;
 import com.kyobo.platform.donots.repository.AdminUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

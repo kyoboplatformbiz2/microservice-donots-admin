@@ -1,4 +1,4 @@
-package com.kyobo.platform.donots.model;
+package com.kyobo.platform.donots.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +33,7 @@ public class AdminUser implements UserDetails {
 
     private String adminName;
 
+    private String departmentName;
     private String role;
 
     private LocalDateTime createdAt;
