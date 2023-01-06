@@ -6,7 +6,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 
 @SpringBootApplication
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800)
 public class MicroserviceDonotsAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(MicroserviceDonotsAdminApplication.class, args);

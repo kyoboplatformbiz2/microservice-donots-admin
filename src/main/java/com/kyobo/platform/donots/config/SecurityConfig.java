@@ -28,24 +28,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
-                .authorizeRequests()
+        http.csrf().disable();
+        http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/super-admin", "/admin")
-                    .hasRole("SUPER_ADMIN")
-                .antMatchers("/admin")
-                    .hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .loginPage("/")
-                .defaultSuccessUrl("/admin")
-                .usernameParameter("adminId")
-                .and()
-                .logout()
+                .antMatchers("/super-admin", "/admin").hasRole("SUPER_ADMIN")
+                .antMatchers("/admin").hasRole("ADMIN");
+        http.formLogin().disable();
+        http.logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true) //세션 날리기
-                .and()
-                .exceptionHandling()
+                .invalidateHttpSession(true); //세션 날리기
+        http.exceptionHandling()
                 .accessDeniedPage("/accessDenied");
 
     }

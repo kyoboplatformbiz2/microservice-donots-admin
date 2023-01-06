@@ -1,5 +1,6 @@
-package com.kyobo.platform.donots.entity;
+package com.kyobo.platform.donots.model.entity;
 
+import com.kyobo.platform.donots.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,13 +9,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,35 +24,59 @@ import java.util.Collection;
 public class AdminUser implements UserDetails {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "ADMIN_ID")
     private String adminId;
 
+    @Column(name = "PASSWORD")
     private String password;
 
-    private String adminName;
+    @Column(name = "ADMIN_USER_NAME")
+    private String adminUserName;
 
+    @Column(name = "ADMIN_USER_NUMBER")
+    private String adminUserNumber;
+
+    @Column(name = "DEPARTMENT_NAME")
     private String departmentName;
+    @Column(name = "ADMIN_ROLE")
     private String role;
 
-    private LocalDateTime createdAt;
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
 
-    private LocalDateTime updatedAt;
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "CREATE_DATE")
+    private LocalDateTime createdDate;
+
+    @Column(name = "LAST_SIGN_IN_DATE")
+    private LocalDateTime lastSignInDate;
+
+    @Column(name = "REASONS_FOR_AUTHORIZATION")
+    private String reasonsForAuthorization;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        Set<GrantedAuthority> roles = new HashSet<>();
 
         for (String role : role.split(",")) {
-            authorities.add(new SimpleGrantedAuthority(role));
+            roles.add(new SimpleGrantedAuthority(role));
         }
-        return authorities;
+        return roles;
     }
 
     @Override
     public String getUsername() {
         return adminId;
+    }
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -74,4 +98,9 @@ public class AdminUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
+
