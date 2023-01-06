@@ -13,12 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/super/admin")
@@ -41,5 +39,16 @@ public class SuperAdminController {
         UserDetails userDetails = loginService.createAdminUser(createAdminUserRequest);
 
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/verification/{adminId}")
+    @Operation(summary = "ADMIN ID 가입확인", description = "로그인 전 비밀번호 찾기를 위한 ADMIN ID 가입확인")
+    @Parameter(name = "adminId", description = "아이디(영문)", example = "kyobo1004")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    public ResponseEntity idVerification (@PathVariable("adminId") String adminId) {
+        Map<String, Boolean> result = loginService.verification(adminId);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 }

@@ -105,4 +105,11 @@ public class LoginService implements UserDetailsService {
         result.put("updateSuccess", true);
         return result;
     }
+
+    public Map<String, Boolean> verification(String adminId) {
+        Map<String, Boolean> result = new HashMap<>();
+        boolean verification = adminUserRepository.existsByAdminId(adminId);
+        result.put("verification", verification);
+        return result;
+    }
 }
