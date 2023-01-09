@@ -1,0 +1,45 @@
+server:
+  port : 9091
+spring :
+  profiles:
+    active:
+      -dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    #url: jdbc:postgresql://localhost:5432/recipe_account
+    url: jdbc:postgresql://localhost:5432/donots_account
+    username: kyobo
+    password: kyobo11!
+    hikari:
+      pool-name: jpa-hikari-pool
+      maximum-pool-size: 5
+      #jdbc-url: jdbc:postgresql://localhost:5432/recipe_account
+      jdbc-url: jdbc:postgresql://localhost:5432/donots_account
+      username: kyobo
+      password: kyobo11!
+      driver-class-name: org.postgresql.Driver
+      data-source-properties :
+        rewriteBatchedStatements: true
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: 'create-drop'
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+      show_sql: true
+      format_sql: true
+      use_sql_comments: true
+logging:
+  level:
+    root: info

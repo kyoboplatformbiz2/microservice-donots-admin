@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.model.dto.request;
 
+import com.kyobo.platform.donots.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -34,6 +35,11 @@ public class ModifyAdminUserRequest {
     private String phoneNumber;
 
     @NotBlank
+    @Schema(description = "권한(")
+    @com.kyobo.platform.donots.model.annotation.Enum(enumClass = Role.class, ignoreCase = true)
+    private String role;
+
+    @NotBlank
     @Email
     @Schema(description = "e-mail")
     private String email;
@@ -45,4 +51,8 @@ public class ModifyAdminUserRequest {
     @NotBlank
     @Schema(description = "등록한 관리자 ID")
     private String regeditAdminId;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 }

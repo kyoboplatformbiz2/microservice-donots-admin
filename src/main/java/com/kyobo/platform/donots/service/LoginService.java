@@ -47,7 +47,7 @@ public class LoginService implements UserDetailsService {
                 .regeditAdminId(createAdminUserRequest.getRegeditAdminId())
                 .email(createAdminUserRequest.getEmail())
                 .reasonsForAuthorization(createAdminUserRequest.getReasonsForAuthorization())
-                .role("ROLE_ADMIN")
+                .role(createAdminUserRequest.getRole())
                 .createdDate(now)
                 .lastSignInDate(now)
                 .build();

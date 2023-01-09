@@ -37,9 +37,10 @@ public class CreateAdminUserRequest {
     @Schema(description = "핸드폰 번호")
     private String phoneNumber;
 
-//    @NotBlank
-//    @Schema(description = "권한")
-//    private Role role;
+    @NotBlank
+    @Schema(description = "권한")
+    @com.kyobo.platform.donots.model.annotation.Enum(enumClass = Role.class, ignoreCase = true)
+    private String role;
 
     @NotBlank
     @Email
@@ -53,4 +54,8 @@ public class CreateAdminUserRequest {
     @NotBlank
     @Schema(description = "등록한 관리자 ID")
     private String regeditAdminId;
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

@@ -70,6 +70,7 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
+
         UserDetails result = loginService.modifyAdminUser(modifyAdminUserRequest);
         return new ResponseEntity(result, HttpStatus.OK);
     }

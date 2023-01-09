@@ -112,6 +112,7 @@ public class AdminUser implements UserDetails {
         this.adminUserNumber = modifyAdminUserRequest.getAdminUserNumber();
         this.phoneNumber = modifyAdminUserRequest.getPhoneNumber();
         this.regeditAdminId = modifyAdminUserRequest.getRegeditAdminId();
+        this.role = modifyAdminUserRequest.getRole();
         this.reasonsForAuthorization = modifyAdminUserRequest.getReasonsForAuthorization();
         this.email = modifyAdminUserRequest.getEmail();
     }
