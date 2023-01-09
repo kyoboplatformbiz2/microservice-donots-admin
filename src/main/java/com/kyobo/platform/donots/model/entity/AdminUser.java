@@ -1,6 +1,7 @@
 package com.kyobo.platform.donots.model.entity;
 
 import com.kyobo.platform.donots.model.Role;
+import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -59,6 +60,8 @@ public class AdminUser implements UserDetails {
     @Column(name = "REASONS_FOR_AUTHORIZATION")
     private String reasonsForAuthorization;
 
+    @Column(name = "REGEDIT_ADMIN_ID")
+    private String regeditAdminId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -101,6 +104,16 @@ public class AdminUser implements UserDetails {
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void updateModifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) {
+        this.adminUserName = modifyAdminUserRequest.getAdminUserName();
+        this.departmentName = modifyAdminUserRequest.getDepartmentName();
+        this.adminUserNumber = modifyAdminUserRequest.getAdminUserNumber();
+        this.phoneNumber = modifyAdminUserRequest.getPhoneNumber();
+        this.regeditAdminId = modifyAdminUserRequest.getRegeditAdminId();
+        this.reasonsForAuthorization = modifyAdminUserRequest.getReasonsForAuthorization();
+        this.email = modifyAdminUserRequest.getEmail();
     }
 }
 

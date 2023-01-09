@@ -5,6 +5,8 @@ import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
 import com.kyobo.platform.donots.model.dto.request.ChangePasswordRequest;
 import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.request.DeleteAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +47,7 @@ public class LoginService implements UserDetailsService {
                 .adminUserNumber(createAdminUserRequest.getAdminUserNumber())
                 .departmentName(createAdminUserRequest.getDepartmentName())
                 .phoneNumber(createAdminUserRequest.getPhoneNumber())
+                .regeditAdminId(createAdminUserRequest.getRegeditAdminId())
                 .email(createAdminUserRequest.getEmail())
                 .reasonsForAuthorization(createAdminUserRequest.getReasonsForAuthorization())
                 .role("ROLE_ADMIN")
@@ -98,7 +101,6 @@ public class LoginService implements UserDetailsService {
             throw new PasswordNotMatchException();
         }
 
-
         adminUser.updatePassword(changePasswordRequest.getNewPassword());
 
         Map<String, Boolean> result = new HashMap<>();
@@ -112,4 +114,27 @@ public class LoginService implements UserDetailsService {
         result.put("verification", verification);
         return result;
     }
+
+    @Transactional
+    public Map<String, Boolean> deleteAdminUser(DeleteAdminUserRequest deleteAdminUserRequest) {
+        Map<String, Boolean> result = new HashMap<>();
+        AdminUser adminUser = adminUserRepository.findByAdminId(deleteAdminUserRequest.getAdminId());
+        adminUserRepository.delete(adminUser);
+        result.put("deleteSuccess", true);
+        return result;
+    }
+
+    @Transactional
+    public UserDetails modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) {
+        AdminUser adminUser = adminUserRepository.findByAdminId(modifyAdminUserRequest.getAdminId());
+
+        if(adminUser == null){
+            throw new AdminUserNotFoundException();
+        }
+        adminUser.updateModifyAdminUser(modifyAdminUserRequest);
+
+        return adminUser;
+    }
+
+
 }

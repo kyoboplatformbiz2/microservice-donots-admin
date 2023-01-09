@@ -27,8 +27,10 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/change/password")
-    @Operation(summary = "본인인증 sms 발송 요청 API ", description = "")
-    @Parameter(name = "birthday", description = "생년월일 6자리", example = "810624")
+    @Operation(summary = "패스워드 변경 ", description = "")
+    @Parameter(name = "adminId", description = "아이디")
+    @Parameter(name = "password", description = "현재 비밀번호")
+    @Parameter(name = "newPassword", description = "새 비밀번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })

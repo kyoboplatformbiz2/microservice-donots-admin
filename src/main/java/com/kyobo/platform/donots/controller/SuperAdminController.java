@@ -1,6 +1,8 @@
 package com.kyobo.platform.donots.controller;
 
 import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.request.DeleteAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import com.kyobo.platform.donots.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +29,14 @@ public class SuperAdminController {
     private final LoginService loginService;
     @PostMapping("/create/admin-user")
     @Operation(summary = "관리자 생성", description = "")
-    @Parameter(name = "birthday", description = "생년월일 6자리", example = "900625")
+    @Parameter(name = "adminId", description = "아이디")
+    @Parameter(name = "password", description = "비밀번호")
+    @Parameter(name = "adminUserName", description = "어드민 유저 이름")
+    @Parameter(name = "adminUserNumber", description = "어드민 사원 번호")
+    @Parameter(name = "departmentName", description = "부서 이름")
+    @Parameter(name = "phoneNumber", description = "핸드폰 번호")
+    @Parameter(name = "email", description = "이메일")
+    @Parameter(name = "reasonsForAuthorization", description = "권한부여사유")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = UserDetails.class))),
@@ -41,9 +50,31 @@ public class SuperAdminController {
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete/admin-user")
+    @Operation(summary = "관리자 ID 삭제", description = "관리자 ID 삭제")
+    @Parameter(name = "adminId", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    public ResponseEntity deleteAdminUser (@RequestBody @Valid DeleteAdminUserRequest deleteAdminUserRequest) {
+        Map<String, Boolean> result = loginService.deleteAdminUser(deleteAdminUserRequest);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @PutMapping("/modify/admin-user")
+    @Operation(summary = "관리자 ID 정보 변경  ", description = "관리자 정보 변경")
+    @Parameter(name = "adminId", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
+        UserDetails result = loginService.modifyAdminUser(modifyAdminUserRequest);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
     @GetMapping("/verification/{adminId}")
-    @Operation(summary = "ADMIN ID 가입확인", description = "로그인 전 비밀번호 찾기를 위한 ADMIN ID 가입확인")
-    @Parameter(name = "adminId", description = "아이디(영문)", example = "kyobo1004")
+    @Operation(summary = "관리자 ID 가입확인", description = "관리자 ID 중복확인")
+    @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
     })
@@ -51,4 +82,7 @@ public class SuperAdminController {
         Map<String, Boolean> result = loginService.verification(adminId);
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+
+
 }
