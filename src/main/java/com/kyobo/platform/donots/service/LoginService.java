@@ -3,10 +3,7 @@ package com.kyobo.platform.donots.service;
 import com.kyobo.platform.donots.common.exception.AdminUserNotFoundException;
 import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
-import com.kyobo.platform.donots.model.dto.request.ChangePasswordRequest;
-import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
-import com.kyobo.platform.donots.model.dto.request.DeleteAdminUserRequest;
-import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.request.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +32,9 @@ public class LoginService implements UserDetailsService {
     public UserDetails createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(createAdminUserRequest.getAdminId());
 
-        if(adminUser != null) {
+        if(adminUser != null)
             throw new AlreadyRegisteredIdException();
-        }
+
 
         LocalDateTime now = LocalDateTime.now();
         adminUser = AdminUser.builder()
@@ -93,13 +90,13 @@ public class LoginService implements UserDetailsService {
     @Transactional
     public Map changePasswordRequest(ChangePasswordRequest changePasswordRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(changePasswordRequest.getAdminId());
-        if(adminUser == null){
+        if(adminUser == null)
             throw new AdminUserNotFoundException();
-        }
 
-        if(!encoder.matches(changePasswordRequest.getPassword(), adminUser.getPassword())){
+
+        if(!encoder.matches(changePasswordRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-        }
+
 
         adminUser.updatePassword(changePasswordRequest.getNewPassword());
 
@@ -128,13 +125,23 @@ public class LoginService implements UserDetailsService {
     public UserDetails modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(modifyAdminUserRequest.getAdminId());
 
-        if(adminUser == null){
+        if(adminUser == null)
             throw new AdminUserNotFoundException();
-        }
+
         adminUser.updateModifyAdminUser(modifyAdminUserRequest);
 
         return adminUser;
     }
 
 
+    public UserDetails signIn(SignInRequest signInRequest) {
+        AdminUser adminUser = adminUserRepository.findByAdminId(signInRequest.getAdminId());
+        if(adminUser == null)
+            throw new AdminUserNotFoundException();
+
+        if(!encoder.matches(signInRequest.getPassword(),  adminUser.getPassword()))
+            throw new PasswordNotMatchException();
+
+        return adminUser;
+    }
 }

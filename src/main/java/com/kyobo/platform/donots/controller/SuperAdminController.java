@@ -55,6 +55,7 @@ public class SuperAdminController {
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity deleteAdminUser (@RequestBody @Valid DeleteAdminUserRequest deleteAdminUserRequest) {
         Map<String, Boolean> result = loginService.deleteAdminUser(deleteAdminUserRequest);
@@ -66,6 +67,7 @@ public class SuperAdminController {
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
         UserDetails result = loginService.modifyAdminUser(modifyAdminUserRequest);
@@ -77,6 +79,7 @@ public class SuperAdminController {
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity idVerification (@PathVariable("adminId") String adminId) {
         Map<String, Boolean> result = loginService.verification(adminId);
