@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -31,12 +32,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/super-admin", "/admin").hasRole("SUPER_ADMIN")
+                .antMatchers("/super/admin", "/admin").hasRole("SUPER_ADMIN")
                 .antMatchers("/admin").hasRole("ADMIN");
-        http.formLogin().disable();
-        http.logout()
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true); //세션 날리기
+        http.formLogin(login -> login.loginPage("/login")
+                        .loginProcessingUrl("loginProcess").permitAll()
+                        .defaultSuccessUrl("/", false)
+                        .failureUrl("/login-error")
+                    );
+        http.logout(logout -> logout.logoutSuccessUrl("/"));
+        http.sessionManagement(s-> s.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::changeSessionId)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/")
+                );
         http.exceptionHandling()
                 .accessDeniedPage("/accessDenied");
 

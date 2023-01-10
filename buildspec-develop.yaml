@@ -1,0 +1,48 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 20
+    commands:
+      - echo Install Kubectl
+      - echo ---------------------------------
+      - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - mkdir ~/.kube
+      - aws eks --region ap-northeast-2 update-kubeconfig --name eks-test
+      - echo ---------------------------------
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR....
+      - aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 677284563273.dkr.ecr.ap-northeast-2.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo ---------------------------------
+      - echo Building the Docker image...
+      - echo $CODEBUILD_BUILD_NUMBER
+      - echo ---------------------------------
+      - AWS_ECR_URI=677284563273.dkr.ecr.ap-northeast-2.amazonaws.com/donots-admin:latest-$CODEBUILD_BUILD_NUMBER
+      - echo $AWS_ECR_URI
+      - echo ---------------------------------
+      - docker build -t $AWS_ECR_URI .
+      - echo ---------------------------------
+      - echo Pushing the Docker image...
+      - echo ---------------------------------
+      - docker push $AWS_ECR_URI
+  post_build:
+    commands:
+#      - kubectl delete service community-service
+#      - kubectl delete deployment community-deployment
+      - sed -i.bak 's#AWS_ECR_URI#'"$AWS_ECR_URI"'#' ./eks-deploy.yaml 
+      - kubectl apply -f ./eks-deploy.yaml
+      - kubectl get ingress
+#      - kubectl get ingress backend-ingress
+#      - kubectl get deployments.apps
+#      - kubectl describe deployments.apps community-deployment
+#      - kubectl describe service community-service
+#      - kubectl get pods -o wide
+#      - kubectl get svc -o wide
+#      - kubectl get node -o wide

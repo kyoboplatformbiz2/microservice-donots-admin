@@ -3,27 +3,26 @@ server:
 spring :
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1
-    #url : jdbc:postgresql://account-db.crfubebnxuuv.ap-northeast-2.rds.amazonaws.com:5432/recipe_account
+    url: jdbc:postgresql://localhost:5432/recipe_account
     #url: jdbc:postgresql://localhost:5432/donots_account
-    username: postgres
+    username: kyobo
     password: kyobo11!
     hikari:
       pool-name: jpa-hikari-pool
       maximum-pool-size: 5
-      jdbc-url: jdbc:postgresql://127.0.0.1:5432/donots_account
+      jdbc-url: jdbc:postgresql://localhost:5432/recipe_account
       #jdbc-url: jdbc:postgresql://localhost:5432/donots_account
       username: kyobo
       password: kyobo11!
       driver-class-name: org.postgresql.Driver
       data-source-properties :
         rewriteBatchedStatements: true
-#  session:
-#     store-type: redis
-#  redis:
-#     host: donots-redis.mpt7r0.clustercfg.apn2.cache.amazonaws.com
-#     port: 6379
-#     database: 0
+  session:
+     store-type: redis
+  redis:
+     host: localhost
+     port: 6379
+     database: 0
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect

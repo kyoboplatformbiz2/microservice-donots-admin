@@ -63,4 +63,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 new ExceptionResponse(new Date(), ex, request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(NotAuthorizedException.class)
+        public final ResponseEntity<Object> notAuthorizedException(BusinessException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex, request.getDescription(false));
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
 }

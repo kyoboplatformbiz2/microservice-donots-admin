@@ -11,7 +11,7 @@ public enum ErrorCode {
     VALID_PARAMETER(4000, "파라메터 인자값이 정상적이지 않습니다."),
     DATA_NOT_FOUND(4001, "조회된 데이터가 없습니다."),
     ADMIN_USER_NOT_FOUND(4002, "조회된 어드민 유저가 없습니다." ),
-
+    NOT_AUTHORIZED(4003, "권한이 없습니다."),
     PASSWORD_NOT_MATCH(5000, "패스워드가 맞지 않습니다."),
     DEFAULT(9999, "정의되지 않은 에러");
 
