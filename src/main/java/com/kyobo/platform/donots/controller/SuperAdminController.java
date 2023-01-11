@@ -27,7 +27,7 @@ import java.util.Map;
 public class SuperAdminController {
 
     private final LoginService loginService;
-    @PostMapping("/v1/create/admin-user")
+    @PostMapping("/v1/admin-user")
     @Operation(summary = "관리자 생성", description = "")
     @Parameter(name = "adminId", description = "아이디")
     @Parameter(name = "password", description = "비밀번호")
@@ -50,7 +50,7 @@ public class SuperAdminController {
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/v1/delete/admin-user")
+    @DeleteMapping("/v1/admin-user")
     @Operation(summary = "관리자 ID 삭제", description = "관리자 ID 삭제")
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
@@ -58,11 +58,11 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity deleteAdminUser (@RequestBody @Valid DeleteAdminUserRequest deleteAdminUserRequest) {
-        Map<String, Boolean> result = loginService.deleteAdminUser(deleteAdminUserRequest);
-        return new ResponseEntity(result, HttpStatus.OK);
+        loginService.deleteAdminUser(deleteAdminUserRequest);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/v1/modify/admin-user")
+    @PutMapping("/v1/admin-user")
     @Operation(summary = "관리자 ID 정보 변경  ", description = "관리자 정보 변경")
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
@@ -70,7 +70,6 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
-
         UserDetails result = loginService.modifyAdminUser(modifyAdminUserRequest);
         return new ResponseEntity(result, HttpStatus.OK);
     }
@@ -83,8 +82,8 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity idVerification (@PathVariable("adminId") String adminId) {
-        Map<String, Boolean> result = loginService.verification(adminId);
-        return new ResponseEntity(result, HttpStatus.OK);
+        loginService.verification(adminId);
+        return ResponseEntity.ok().build();
     }
 
 

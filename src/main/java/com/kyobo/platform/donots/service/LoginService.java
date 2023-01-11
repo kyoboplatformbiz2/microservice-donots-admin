@@ -61,38 +61,25 @@ public class LoginService implements UserDetailsService {
     }
 
     @Transactional
-    public Map changePasswordRequest(ChangePasswordRequest changePasswordRequest) {
+    public void changePasswordRequest(ChangePasswordRequest changePasswordRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(changePasswordRequest.getAdminId());
         if(adminUser == null)
             throw new AdminUserNotFoundException();
-
-
         if(!encoder.matches(changePasswordRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-
-
         adminUser.updatePassword(changePasswordRequest.getNewPassword());
-
-        Map<String, Boolean> result = new HashMap<>();
-        result.put("updateSuccess", true);
-        return result;
     }
 
-    public Map<String, Boolean> verification(String adminId) {
+    public void verification(String adminId) {
         Map<String, Boolean> result = new HashMap<>();
         boolean verification = adminUserRepository.existsByAdminId(adminId);
-        result.put("verification", verification);
-        return result;
     }
 
     @Transactional
-    public Map<String, Boolean> deleteAdminUser(DeleteAdminUserRequest deleteAdminUserRequest) {
+    public void deleteAdminUser(DeleteAdminUserRequest deleteAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(deleteAdminUserRequest.getAdminId());
 
         adminUserRepository.delete(adminUser);
-        Map<String, Boolean> result = new HashMap<>();
-        result.put("deleteSuccess", true);
-        return result;
     }
 
     @Transactional

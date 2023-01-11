@@ -1,14 +1,17 @@
 package com.kyobo.platform.donots.service;
 
+import com.kyobo.platform.donots.model.dto.request.FaqPostRequest;
+import com.kyobo.platform.donots.model.dto.response.FaqListResponse;
+import com.kyobo.platform.donots.model.dto.response.FaqResponse;
 import com.kyobo.platform.donots.model.entity.FaqPost;
 import com.kyobo.platform.donots.model.repository.FaqPostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,34 +19,37 @@ import java.util.List;
 public class FaqPostService {
     private FaqPostRepository faqPostRepository;
 
-    private EntityManager em;
 
-    public FaqPostService(FaqPostRepository faqPostRepository, EntityManager em) {
-        this.faqPostRepository = faqPostRepository;
-        this.em = em;
+    public List<FaqResponse> findAllFaqPostSummaries() {
+        return faqPostRepository.findAllByOrderByCreatedDatetimeDesc().stream()
+                .map(m-> new FaqResponse(m))
+                .collect(Collectors.toList());
     }
 
-    public List<FaqPost> findAllFaqPostSummaries() {
-        List<FaqPost> faqPosts = faqPostRepository.findAll();
-        return faqPosts;
-    }
-
-    public FaqPost findFaqPostDetailsByKey(Long key) {
+    public FaqResponse findFaqPostDetailsByKey(Long key) {
         FaqPost faqPost = faqPostRepository.findById(key).get();
-        return faqPost;
+        return new FaqResponse(faqPost);
     }
 
     @Transactional
-    public Long registerFaqPost(FaqPost faqPost) {
-        em.persist(faqPost);
+    public Long registerFaqPost(FaqPostRequest faqPostRequest) {
+        LocalDateTime now = LocalDateTime.now();
+        FaqPost faqPost = FaqPost.builder()
+                .faqCategory(faqPostRequest.getFaqCategory())
+                .answer(faqPostRequest.getAnswer())
+                .representativeImgUrl(faqPostRequest.getRepresentativeImgUrl())
+                .lastModifiedDatetime(now)
+                .createdDatetime(now)
+                .build();
+        faqPost = faqPostRepository.save(faqPost);
+
         return faqPost.getKey();
     }
 
     @Transactional
-    public void modifyFaqPost(Long key, FaqPost faqPost) {
-        FaqPost foundFaqPost = faqPostRepository.findById(key).get();
-        foundFaqPost.deepCopyAllExceptKeyFrom(faqPost);
-        em.persist(foundFaqPost);
+    public void modifyFaqPost(Long key, FaqPostRequest faqPostRequest) {
+        FaqPost faqPost = faqPostRepository.findById(key).get();
+        faqPost.updateFaqPost(faqPostRequest);
     }
 
     @Transactional

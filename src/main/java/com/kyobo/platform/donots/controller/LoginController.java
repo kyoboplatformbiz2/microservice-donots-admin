@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Slf4j
 @RequestMapping("/login")
@@ -36,8 +35,8 @@ public class LoginController {
             @ApiResponse(responseCode = "5000", description = "패스워드가 맞지 않습니다")
     })
     public ResponseEntity changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
-        Map<String, Boolean> result = loginService.changePasswordRequest(changePasswordRequest);
-        return new ResponseEntity(result, HttpStatus.OK);
+        loginService.changePasswordRequest(changePasswordRequest);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/v1/signIn")

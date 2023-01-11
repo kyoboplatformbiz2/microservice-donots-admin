@@ -41,14 +41,12 @@ public class NoticeService {
     }
 
     @Transactional
-    public NoticeResponse updateNotice(Long noticePostKey, NoticeRequest noticeRequest) {
-        LocalDateTime now = LocalDateTime.now();
+    public void updateNotice(Long noticePostKey, NoticeRequest noticeRequest) {
         NoticePost noticePost = noticePostRepository.findByNoticePostKey(noticePostKey);
         if(noticePost == null){
             throw new DataNotFoundException();
         }
-        noticePost.updateNotice(noticeRequest.getTitle(), noticeRequest.getBody(), noticeRequest.getImgUrl(), now);
-        return new NoticeResponse(noticePost);
+        noticePost.updateNotice(noticeRequest.getTitle(), noticeRequest.getBody(), noticeRequest.getImgUrl());
     }
 
     private NoticePost noticePostRegedit(NoticeRequest noticeRequest){

@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/noAuth")
@@ -25,7 +27,7 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
-    @PostMapping("/v1/notice/post/regedit")
+    @PostMapping("/v1/notice/post")
     @Operation(summary = "공지사항 등록", description = "관리자 공지사항 게시판 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "성공"),
@@ -34,8 +36,14 @@ public class NoticeController {
     })
     public ResponseEntity noticeRegedit (@RequestBody @Valid NoticeRequest noticeRequest) {
         Long result = noticeService.noticeRegedit(noticeRequest);
-        return new ResponseEntity(result, HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{key}")
+                .buildAndExpand(result)
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("/v1/notice/post")
     @Operation(summary = "공지사항 삭제", description = "관리자 공지사항 게시판 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
@@ -44,23 +52,22 @@ public class NoticeController {
     })
     public ResponseEntity deleteNotice(@PathVariable("noticePostKey") Long noticePostKey) {
         noticeService.deleteNotice(noticePostKey);
-        return new ResponseEntity("ok", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
-    @PutMapping("/v1/notice/post/updateNotice/{noticePostKey}")
+    @PutMapping("/v1/notice/post/{noticePostKey}")
     @Operation(summary = "공지사항 수정", description = "관리자 공지사항 게시판 수정")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수정 성공",
-                    content = @Content(schema = @Schema(implementation = NoticeResponse.class))),
+            @ApiResponse(responseCode = "200", description = "수정 성공"),
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
     public ResponseEntity updateNotice(@PathVariable("noticePostKey") Long noticePostKey, @RequestBody @Valid NoticeRequest noticeRequest) {
-        NoticeResponse result = noticeService.updateNotice(noticePostKey, noticeRequest);
-        return new ResponseEntity(result, HttpStatus.OK);
+        noticeService.updateNotice(noticePostKey, noticeRequest);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/v1/notice/post/getNoticeDetail/{noticePostKey}")
-    @Operation(summary = "공지사항 상세 조회", description = "유저/관리자 공지사항 게시판 등록")
+    @GetMapping("/v1/notice/post/{noticePostKey}")
+    @Operation(summary = "공지사항 상세 조회", description = "유저/관리자 공지사항 게시판 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = NoticeResponse.class))),
@@ -72,11 +79,11 @@ public class NoticeController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @GetMapping("/v1/notice/post/getNoticeList")
+    @GetMapping("/v1/notice/post")
     @Operation(summary = "공지사항 리스트 조회", description = "유저/관리자 공지사항 게시판 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = NoticeResponse.class))),
+                    content = @Content(schema = @Schema(implementation = NoticeListResponse.class))),
     })
     public ResponseEntity getNoticeList () {
         return new ResponseEntity(new NoticeListResponse(noticeService.getNoticeList()), HttpStatus.OK);

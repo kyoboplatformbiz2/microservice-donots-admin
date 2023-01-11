@@ -9,6 +9,7 @@ public class NoticeListResponse {
 
     public NoticeListResponse(){}
     List<NoticeResponse> noticeResponseList;
+
     public NoticeListResponse(List<NoticeResponse> list){
         this.noticeResponseList = list;
     }

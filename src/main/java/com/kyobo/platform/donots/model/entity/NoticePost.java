@@ -35,11 +35,12 @@ public class NoticePost {
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
     private LocalDateTime lastModifiedDate;
 
-    public void updateNotice(String title, String body, String imageUrl, LocalDateTime lastModifiedDate){
+    public void updateNotice(String title, String body, String imageUrl){
+        LocalDateTime now = LocalDateTime.now();
         this.title = title;
         this.body = body;
         this.imageUrl = imageUrl;
-        this.lastModifiedDate = lastModifiedDate;
+        this.lastModifiedDate = now;
     }
 
 }
