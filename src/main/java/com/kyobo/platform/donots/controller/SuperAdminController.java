@@ -27,7 +27,7 @@ import java.util.Map;
 public class SuperAdminController {
 
     private final LoginService loginService;
-    @PostMapping("/create/admin-user")
+    @PostMapping("/v1/create/admin-user")
     @Operation(summary = "관리자 생성", description = "")
     @Parameter(name = "adminId", description = "아이디")
     @Parameter(name = "password", description = "비밀번호")
@@ -50,7 +50,7 @@ public class SuperAdminController {
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/admin-user")
+    @DeleteMapping("/v1/delete/admin-user")
     @Operation(summary = "관리자 ID 삭제", description = "관리자 ID 삭제")
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
@@ -62,7 +62,7 @@ public class SuperAdminController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PutMapping("/modify/admin-user")
+    @PutMapping("/v1/modify/admin-user")
     @Operation(summary = "관리자 ID 정보 변경  ", description = "관리자 정보 변경")
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
@@ -75,7 +75,7 @@ public class SuperAdminController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @GetMapping("/verification/{adminId}")
+    @GetMapping("/v1/verification/{adminId}")
     @Operation(summary = "관리자 ID 가입확인", description = "관리자 ID 중복확인")
     @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
