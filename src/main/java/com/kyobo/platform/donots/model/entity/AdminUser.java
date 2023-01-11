@@ -1,6 +1,5 @@
 package com.kyobo.platform.donots.model.entity;
 
-import com.kyobo.platform.donots.model.Role;
 import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "ADMIN_USER")
 public class AdminUser implements UserDetails {
 
     @Id
