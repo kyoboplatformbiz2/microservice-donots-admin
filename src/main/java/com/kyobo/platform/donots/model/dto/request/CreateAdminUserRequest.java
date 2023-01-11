@@ -38,7 +38,7 @@ public class CreateAdminUserRequest {
     private String phoneNumber;
 
     @NotBlank
-    @Schema(description = "권한")
+    @Schema(description = "권한(SUPER_ADMIN, ADMIN)")
     @com.kyobo.platform.donots.model.annotation.Enum(enumClass = Role.class, ignoreCase = true)
     private String role;
 
