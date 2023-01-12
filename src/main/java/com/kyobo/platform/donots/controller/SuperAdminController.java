@@ -82,8 +82,8 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity idVerification (@PathVariable("adminId") String adminId) {
-        loginService.verification(adminId);
-        return ResponseEntity.ok().build();
+        Map<String, Boolean> result = loginService.verification(adminId);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
 

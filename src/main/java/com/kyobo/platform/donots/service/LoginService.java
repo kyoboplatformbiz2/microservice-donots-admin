@@ -70,15 +70,16 @@ public class LoginService implements UserDetailsService {
         adminUser.updatePassword(changePasswordRequest.getNewPassword());
     }
 
-    public void verification(String adminId) {
+    public Map<String, Boolean> verification(String adminId) {
         Map<String, Boolean> result = new HashMap<>();
         boolean verification = adminUserRepository.existsByAdminId(adminId);
+        result.put("verification", verification);
+        return result;
     }
 
     @Transactional
     public void deleteAdminUser(DeleteAdminUserRequest deleteAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(deleteAdminUserRequest.getAdminId());
-
         adminUserRepository.delete(adminUser);
     }
 
@@ -88,7 +89,6 @@ public class LoginService implements UserDetailsService {
 
         if(adminUser == null)
             throw new AdminUserNotFoundException();
-
 
         adminUser.updateModifyAdminUser(modifyAdminUserRequest);
 
@@ -103,8 +103,6 @@ public class LoginService implements UserDetailsService {
 
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-
-//        httpSession.setAttribute(signInRequest.getAdminId(), adminUser);
 
         return adminUser;
     }
