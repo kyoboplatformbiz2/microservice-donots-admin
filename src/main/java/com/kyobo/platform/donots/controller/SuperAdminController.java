@@ -85,7 +85,4 @@ public class SuperAdminController {
         Map<String, Boolean> result = loginService.verification(adminId);
         return new ResponseEntity(result, HttpStatus.OK);
     }
-
-
-
 }

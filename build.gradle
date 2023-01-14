@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.7.5.RELEASE'
+        queryDslVersion = "5.0.0"
     }
     repositories {
         mavenCentral()
@@ -15,6 +16,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
     id 'war'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.kyobo.platform.donots'
@@ -25,6 +27,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -43,13 +46,33 @@ dependencies {
     //implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'org.projectlombok:lombok'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+
     compileOnly 'org.projectlombok:lombok'
+
     runtimeOnly 'org.postgresql:postgresql'
+
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
 
 tasks.named('test') {
     useJUnitPlatform()
