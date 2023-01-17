@@ -56,6 +56,9 @@ public class AdminUser implements UserDetails {
     @Column(name = "LAST_SIGN_IN_DATE")
     private LocalDateTime lastSignInDate;
 
+    @Column(name = "LAST_PASSWORD_CHANGE_DATE")
+    private LocalDateTime lastPasswordChangeDate;
+
     @Column(name = "REASONS_FOR_AUTHORIZATION")
     private String reasonsForAuthorization;
 
@@ -102,7 +105,9 @@ public class AdminUser implements UserDetails {
     }
 
     public void updatePassword(String newPassword) {
+        LocalDateTime now = LocalDateTime.now();
         this.password = newPassword;
+        this.lastPasswordChangeDate = now;
     }
 
     public void updateModifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) {

@@ -27,7 +27,7 @@ public class DatabaseConfig  {
     @Value("${spring.datasource.password}")
     private String password;
 
-    private String DB_NAME =  "/donots_account";
+    private String DB_NAME =  "/postgres";
 
     @Bean
     public DataSource dataSource() {

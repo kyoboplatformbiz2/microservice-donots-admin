@@ -1,5 +1,5 @@
 server:
-  port : 9091
+  port : 9090
 spring :
   profiles:
     active:
@@ -31,7 +31,7 @@ spring :
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: false
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     show-sql: true

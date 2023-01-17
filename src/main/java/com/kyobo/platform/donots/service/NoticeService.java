@@ -46,7 +46,8 @@ public class NoticeService {
         if(noticePost == null){
             throw new DataNotFoundException();
         }
-        noticePost.updateNotice(noticeRequest.getTitle(), noticeRequest.getBody(), noticeRequest.getImgUrl());
+        noticePost.updateNotice(noticeRequest.getTitle(), noticeRequest.getBody(), noticeRequest.getImgUrl(),
+                noticeRequest.getBoardStartDate(), noticeRequest.getBoardEndDate());
     }
 
     private NoticePost noticePostRegedit(NoticeRequest noticeRequest){
@@ -55,6 +56,8 @@ public class NoticeService {
                 .title(noticeRequest.getTitle())
                 .imageUrl(noticeRequest.getImgUrl())
                 .body(noticeRequest.getBody())
+                .boardStartDate(noticeRequest.getBoardStartDate())
+                .boardEndDate(noticeRequest.getBoardEndDate())
                 .createdDate(now)
                 .lastModifiedDate(now)
                 .build();
