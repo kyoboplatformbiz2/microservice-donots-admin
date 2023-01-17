@@ -5,6 +5,7 @@ import com.kyobo.platform.donots.model.entity.NoticePost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,6 +31,11 @@ public class NoticeResponse {
     @Schema(description = "최종수정일시")
     private LocalDateTime lastModifiedDate;
 
+    @Schema(description = "게시 시작 일시")
+    private LocalDateTime boardStartDate;
+
+    @Schema(description = "게시 종료 일시")
+    private LocalDateTime boardEndDate;
     @Schema(description = "신규 공지사항 (true) 등록일 기준 1주일 미만")
     private Boolean isNewPost;
 
@@ -41,6 +47,8 @@ public class NoticeResponse {
         this.imgUrl = noticePost.getImageUrl();
         this.createdDate = noticePost.getCreatedDate();
         this.lastModifiedDate = noticePost.getLastModifiedDate();
+        this.boardStartDate = noticePost.getBoardStartDate();
+        this.boardEndDate = noticePost.getBoardEndDate();
 
         LocalDateTime now = LocalDateTime.now();
         if (noticePost.getCreatedDate().plusDays(7).isAfter(now))
