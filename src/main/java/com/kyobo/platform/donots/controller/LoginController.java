@@ -25,9 +25,6 @@ public class LoginController {
 
     @PostMapping("/v1/change/password")
     @Operation(summary = "패스워드 변경 ", description = "")
-    @Parameter(name = "adminId", description = "아이디")
-    @Parameter(name = "password", description = "현재 비밀번호")
-    @Parameter(name = "newPassword", description = "새 비밀번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다."),
@@ -41,8 +38,6 @@ public class LoginController {
 
     @PostMapping("/v1/signIn")
     @Operation(summary = "로그인 ", description = "")
-    @Parameter(name = "adminId", description = "아이디")
-    @Parameter(name = "password", description = "현재 비밀번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다."),

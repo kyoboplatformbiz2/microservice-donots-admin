@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -29,14 +30,6 @@ public class SuperAdminController {
     private final LoginService loginService;
     @PostMapping("/v1/admin-user")
     @Operation(summary = "관리자 생성", description = "")
-    @Parameter(name = "adminId", description = "아이디")
-    @Parameter(name = "password", description = "비밀번호")
-    @Parameter(name = "adminUserName", description = "어드민 유저 이름")
-    @Parameter(name = "adminUserNumber", description = "어드민 사원 번호")
-    @Parameter(name = "departmentName", description = "부서 이름")
-    @Parameter(name = "phoneNumber", description = "핸드폰 번호")
-    @Parameter(name = "email", description = "이메일")
-    @Parameter(name = "reasonsForAuthorization", description = "권한부여사유")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = UserDetails.class))),
@@ -44,15 +37,12 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity createAdminUser(@RequestBody @Valid CreateAdminUserRequest createAdminUserRequest) {
-
         UserDetails userDetails = loginService.createAdminUser(createAdminUserRequest);
-
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/v1/admin-user")
     @Operation(summary = "관리자 ID 삭제", description = "관리자 ID 삭제")
-    @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
@@ -64,19 +54,29 @@ public class SuperAdminController {
 
     @PutMapping("/v1/admin-user")
     @Operation(summary = "관리자 ID 정보 변경  ", description = "관리자 정보 변경")
-    @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
-        UserDetails result = loginService.modifyAdminUser(modifyAdminUserRequest);
-        return new ResponseEntity(result, HttpStatus.OK);
+        loginService.modifyAdminUser(modifyAdminUserRequest);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/v1/admin-user")
+    @Operation(summary = "관리자 ID 조회  ", description = "관리자 정보 변경")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
+    })
+    public ResponseEntity getAdminUserAll () {
+      //  List<UserDetails> list = loginService.getAdminUserAll();
+        return new ResponseEntity("", HttpStatus.OK);
     }
 
     @GetMapping("/v1/verification/{adminId}")
     @Operation(summary = "관리자 ID 가입확인", description = "관리자 ID 중복확인")
-    @Parameter(name = "adminId", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")

@@ -42,7 +42,6 @@ public class FaqPostController {
 
     @GetMapping("/v1/faq-posts/{key}")
     @Operation(summary = "FAQ  상세 조회 ", description = "")
-    @Parameter(name = "key", description = "게시물 번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                 content = @Content(schema = @Schema(implementation = FaqResponse.class))),
@@ -54,10 +53,6 @@ public class FaqPostController {
 
     @PostMapping("/v1/faq-posts")
     @Operation(summary = "FAQ 등록 ", description = "")
-    @Parameter(name = "faqCategory", description = "카테고리")
-    @Parameter(name = "question", description = "질문")
-    @Parameter(name = "answer", description = "답변")
-    @Parameter(name = "representativeImgUrl", description = "이미지 url")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
@@ -72,10 +67,6 @@ public class FaqPostController {
 
     @PatchMapping("/v1/faq-posts/{key}")
     @Operation(summary = "FAQ 업데이트 ", description = "")
-    @Parameter(name = "faqCategory", description = "카테고리")
-    @Parameter(name = "question", description = "질문")
-    @Parameter(name = "answer", description = "답변")
-    @Parameter(name = "representativeImgUrl", description = "이미지 url")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
@@ -86,7 +77,6 @@ public class FaqPostController {
 
     @DeleteMapping("/v1/faq-posts/{key}")
     @Operation(summary = "FAQ 삭제 ", description = "")
-    @Parameter(name = "key", description = "게시물 번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })

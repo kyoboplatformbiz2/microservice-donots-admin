@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -67,7 +68,7 @@ public class LoginService implements UserDetailsService {
             throw new AdminUserNotFoundException();
         if(!encoder.matches(changePasswordRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-        adminUser.updatePassword(changePasswordRequest.getNewPassword());
+        adminUser.updatePassword(encoder.encode(changePasswordRequest.getNewPassword()));
     }
 
     public Map<String, Boolean> verification(String adminId) {
@@ -112,5 +113,10 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AdminUser adminUser = adminUserRepository.findByAdminId(username);
         return adminUser;
+    }
+
+    public List<AdminUser> getAdminUserAll() {
+        List<AdminUser> list = adminUserRepository.findAll();
+        return list;
     }
 }
