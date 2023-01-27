@@ -37,6 +37,7 @@ public class FaqPostController {
                     content = @Content(schema = @Schema(implementation = FaqListResponse.class))),
     })
     public ResponseEntity<?> findAllFaqPostSummaries() {
+        log.info("findAllFaqPostSummaries");
         return new ResponseEntity(new FaqListResponse(faqPostService.findAllFaqPostSummaries()), HttpStatus.OK);
     }
 

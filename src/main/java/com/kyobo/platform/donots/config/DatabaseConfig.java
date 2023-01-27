@@ -30,7 +30,7 @@ public class DatabaseConfig  {
     @Value("${spring.datasource.password}")
     private String password;
 
-    private String DB_NAME =  "/postgres";
+    private String DB_NAME =  "/donots_account";
 
     @Bean
     public DataSource dataSource() {

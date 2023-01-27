@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class FaqPostService {
-    private FaqPostRepository faqPostRepository;
+    private final FaqPostRepository faqPostRepository;
 
 
     public List<FaqResponse> findAllFaqPostSummaries() {
@@ -41,7 +41,7 @@ public class FaqPostService {
                 .lastModifiedDatetime(now)
                 .createdDatetime(now)
                 .build();
-        faqPost = faqPostRepository.save(faqPost);
+        faqPost = faqPostRepository.saveAndFlush(faqPost);
 
         return faqPost.getKey();
     }
