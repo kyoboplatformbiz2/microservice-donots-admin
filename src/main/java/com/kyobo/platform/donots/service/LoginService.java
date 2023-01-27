@@ -79,9 +79,8 @@ public class LoginService implements UserDetailsService {
     }
 
     @Transactional
-    public void deleteAdminUser(DeleteAdminUserRequest deleteAdminUserRequest) {
-        AdminUser adminUser = adminUserRepository.findByAdminId(deleteAdminUserRequest.getAdminId());
-        adminUserRepository.delete(adminUser);
+    public void deleteAdminUser(Long id) {
+        adminUserRepository.deleteById(id);
     }
 
     @Transactional
@@ -101,10 +100,8 @@ public class LoginService implements UserDetailsService {
         AdminUser adminUser = adminUserRepository.findByAdminId(signInRequest.getAdminId());
         if(adminUser == null)
             throw new AdminUserNotFoundException();
-
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-
         return adminUser;
     }
 

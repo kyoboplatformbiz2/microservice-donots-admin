@@ -42,14 +42,14 @@ public class SuperAdminController {
         return new ResponseEntity(userDetails, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/v1/admin-user")
+    @DeleteMapping("/v1/admin-user/{id}")
     @Operation(summary = "관리자 ID 삭제", description = "관리자 ID 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity deleteAdminUser (@RequestBody @Valid DeleteAdminUserRequest deleteAdminUserRequest) {
-        loginService.deleteAdminUser(deleteAdminUserRequest);
+    public ResponseEntity deleteAdminUser(@PathVariable("id") Long id) {
+        loginService.deleteAdminUser(id);
         return ResponseEntity.ok().build();
     }
 
