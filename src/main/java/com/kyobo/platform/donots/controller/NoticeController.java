@@ -43,7 +43,7 @@ public class NoticeController {
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping("/v1/notice/post/{noticePostKey} ")
+    @DeleteMapping("/v1/notice/post/{noticePostKey}")
     @Operation(summary = "공지사항 삭제", description = "관리자 공지사항 게시판 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
