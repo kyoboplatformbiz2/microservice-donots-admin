@@ -12,7 +12,7 @@ public class DeleteAdminUserRequest {
     public DeleteAdminUserRequest(){}
 
     @NotBlank
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{4,20}$", message = "아이디는 특수문자를 제외한 4~20자리여야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "아이디는 영문자(대,소문자) 숫자로 5~20자리이어야 합니다.")
     @Schema(description = "아이디")
     private String adminId;
 
