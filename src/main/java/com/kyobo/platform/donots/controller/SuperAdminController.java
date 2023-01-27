@@ -6,7 +6,6 @@ import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/super/admin")
@@ -64,7 +64,7 @@ public class SuperAdminController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/v1/admin-user/{adminId}")
+    @GetMapping("/v1/admin-user/{id}")
     @Operation(summary = "관리자 상세조회", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -72,8 +72,8 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity getAdminUser(@PathVariable("adminId") String adminId) {
-        UserDetails userDetails = loginService.loadUserByUsername(adminId);
+    public ResponseEntity getAdminUser(@PathVariable("id") Long id) {
+        Optional<AdminUser> userDetails = loginService.loadUserByUsername(id);
         return new ResponseEntity(userDetails, HttpStatus.OK);
     }
 

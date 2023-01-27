@@ -4,6 +4,7 @@ import com.kyobo.platform.donots.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 @Getter
@@ -46,6 +47,16 @@ public class CreateAdminUserRequest {
     @Email
     @Schema(description = "e-mail")
     private String email;
+
+    @NotBlank
+    @Schema(description = "메모")
+    private String memo;
+
+
+    @NotBlank
+    @Schema(description = "첨부파일 url")
+    private String attachImageUrl;
+
 
     @NotBlank
     @Schema(description = "권한 부여 사유")

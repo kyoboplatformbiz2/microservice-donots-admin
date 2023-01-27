@@ -35,6 +35,14 @@ public class ModifyAdminUserRequest {
     private String phoneNumber;
 
     @NotBlank
+    @Schema(description = "메모")
+    private String memo;
+
+    @NotBlank
+    @Schema(description = "첨부파일 url")
+    private String attachImageUrl;
+
+    @NotBlank
     @Schema(description = "권한(SUPER_ADMIN, ADMIN)")
     @com.kyobo.platform.donots.model.annotation.Enum(enumClass = Role.class, ignoreCase = true)
     private String role;

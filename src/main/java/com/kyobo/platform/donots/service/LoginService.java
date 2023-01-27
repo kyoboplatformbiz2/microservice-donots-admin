@@ -2,9 +2,7 @@ package com.kyobo.platform.donots.service;
 
 import com.kyobo.platform.donots.common.exception.AdminUserNotFoundException;
 import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
-import com.kyobo.platform.donots.common.exception.NotAuthorizedException;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
-import com.kyobo.platform.donots.model.Role;
 import com.kyobo.platform.donots.model.dto.request.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
@@ -17,11 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +49,8 @@ public class LoginService implements UserDetailsService {
                 .email(createAdminUserRequest.getEmail())
                 .reasonsForAuthorization(createAdminUserRequest.getReasonsForAuthorization())
                 .role(createAdminUserRequest.getRole())
+                .attachImageUrl(createAdminUserRequest.getAttachImageUrl())
+                .memo(createAdminUserRequest.getMemo())
                 .createdDate(now)
                 .lastSignInDate(now)
                 .build();
@@ -112,6 +112,12 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AdminUser adminUser = adminUserRepository.findByAdminId(username);
+        return adminUser;
+    }
+
+
+    public Optional<AdminUser> loadUserByUsername(Long id) throws UsernameNotFoundException {
+        Optional<AdminUser> adminUser = adminUserRepository.findById(id);
         return adminUser;
     }
 

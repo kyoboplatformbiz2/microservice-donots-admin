@@ -50,6 +50,12 @@ public class AdminUser implements UserDetails {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "MEMO")
+    private String memo;
+
+    @Column(name = "ATTACH_IMAGE_URL")
+    private String attachImageUrl;
+
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
@@ -119,6 +125,8 @@ public class AdminUser implements UserDetails {
         this.role = modifyAdminUserRequest.getRole();
         this.reasonsForAuthorization = modifyAdminUserRequest.getReasonsForAuthorization();
         this.email = modifyAdminUserRequest.getEmail();
+        this.memo = modifyAdminUserRequest.getMemo();
+        this.attachImageUrl = modifyAdminUserRequest.getAttachImageUrl();
     }
 }
 
