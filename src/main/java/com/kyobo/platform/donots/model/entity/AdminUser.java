@@ -128,5 +128,9 @@ public class AdminUser implements UserDetails {
         this.memo = modifyAdminUserRequest.getMemo();
         this.attachImageUrl = modifyAdminUserRequest.getAttachImageUrl();
     }
+
+    public void updateAttachImageUrl(String attachImageUrl){
+        this.attachImageUrl = attachImageUrl;
+    }
 }
 
