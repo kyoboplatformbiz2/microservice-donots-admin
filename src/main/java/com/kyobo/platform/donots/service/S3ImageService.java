@@ -29,7 +29,7 @@ public class S3ImageService {
     private final S3FileUploadUtil s3FileUploadUtil;
 
     @Transactional
-    public void uploadAdminImage(String adminId, MultipartFile multipartFile) throws IOException, SdkClientException, DecoderException {
+    public String uploadAdminImage(String adminId, MultipartFile multipartFile) throws IOException, SdkClientException, DecoderException {
 
         AdminUser adminUser = adminUserRepository.findByAdminId(adminId);
         if (adminUser == null) {
@@ -40,7 +40,7 @@ public class S3ImageService {
         String attachImageUrl = s3FileUploadUtil.uploadImageToS3AndGetUrl(multipartFile, adminUser.getAttachImageUrl(), domain);
 
         // 업로드된 이미지 URL을 DB에 저장
-        adminUser.updateAttachImageUrl(attachImageUrl);
+        return attachImageUrl;
     }
 
     @Transactional
