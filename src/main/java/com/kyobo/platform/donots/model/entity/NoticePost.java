@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,15 +33,19 @@ public class NoticePost {
     private String imageUrl;
 
     @Column(name = "CREATED_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime createdDate;
 
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastModifiedDate;
 
     @Column(name = "BOARD_START_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime boardStartDate;
 
     @Column(name = "BOARD_END_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime boardEndDate;
 
     public void updateNotice(String title, String body, String imageUrl, LocalDateTime boardStartDate, LocalDateTime boardEndDate){

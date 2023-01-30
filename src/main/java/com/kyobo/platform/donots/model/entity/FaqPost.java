@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kyobo.platform.donots.model.dto.request.FaqPostRequest;
 import lombok.*;
 
@@ -24,7 +25,10 @@ public class FaqPost {
     private String question;
     private String answer;
     private String representativeImgUrl;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime createdDatetime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastModifiedDatetime;
     public void updateFaqPost(FaqPostRequest faqPostRequest) {
         LocalDateTime now = LocalDateTime.now();
