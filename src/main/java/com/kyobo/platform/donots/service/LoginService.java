@@ -2,6 +2,7 @@ package com.kyobo.platform.donots.service;
 
 import com.kyobo.platform.donots.common.exception.AdminUserNotFoundException;
 import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
+import com.kyobo.platform.donots.common.exception.PasswordIncludePersonalInformation;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
 import com.kyobo.platform.donots.model.dto.request.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
@@ -68,6 +69,10 @@ public class LoginService implements UserDetailsService {
             throw new AdminUserNotFoundException();
         if(!encoder.matches(changePasswordRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
+        if(changePasswordRequest.getNewPassword().contains(changePasswordRequest.getAdminId()))
+            throw new PasswordIncludePersonalInformation();
+        if(changePasswordRequest.getNewPassword().contains(adminUser.getPhoneNumber()))
+            throw new PasswordIncludePersonalInformation();
         adminUser.updatePassword(encoder.encode(changePasswordRequest.getNewPassword()));
     }
 
