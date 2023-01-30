@@ -48,6 +48,8 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation 'com.amazonaws:aws-java-sdk:1.12.334'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.281'
 
     compileOnly 'org.projectlombok:lombok'
 

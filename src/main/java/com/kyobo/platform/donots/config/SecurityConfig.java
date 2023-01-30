@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
+        http.cors().configurationSource(request -> {
+            var cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("*"));
+            cors.setAllowedMethods(List.of("*"));
+            cors.setAllowedHeaders(List.of("*"));
+            return cors;
+        });
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/super/admin", "/admin").hasRole("SUPER_ADMIN")
@@ -38,13 +48,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .loginProcessingUrl("loginProcess").permitAll()
                         .defaultSuccessUrl("/", false)
                         .failureUrl("/login-error")
-                    );
+        );
         http.logout(logout -> logout.logoutSuccessUrl("/"));
         http.sessionManagement(s-> s.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::changeSessionId)
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
                         .expiredUrl("/")
-                );
+        );
         http.exceptionHandling()
                 .accessDeniedPage("/accessDenied");
 
