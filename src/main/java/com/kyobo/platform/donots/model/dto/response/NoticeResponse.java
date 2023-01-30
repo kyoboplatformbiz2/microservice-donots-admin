@@ -1,6 +1,7 @@
 package com.kyobo.platform.donots.model.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kyobo.platform.donots.model.entity.NoticePost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -26,16 +27,21 @@ public class NoticeResponse {
     private String imgUrl;
 
     @Schema(description = "작성일시")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime createdDate;
     
     @Schema(description = "최종수정일시")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastModifiedDate;
 
     @Schema(description = "게시 시작 일시")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime boardStartDate;
 
     @Schema(description = "게시 종료 일시")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime boardEndDate;
+
     @Schema(description = "신규 공지사항 (true) 등록일 기준 1주일 미만")
     private Boolean isNewPost;
 
