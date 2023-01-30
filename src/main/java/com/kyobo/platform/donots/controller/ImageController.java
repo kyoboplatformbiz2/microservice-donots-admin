@@ -26,6 +26,17 @@ import java.util.Map;
 public class ImageController {
     private final S3ImageService s3ImageService;
 
+    @DeleteMapping("/v1/admin-user/{adminId}")
+    @Operation(summary = "admin 첨부 이미지 > 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
+    public ResponseEntity<?> deleteAdminImage(@PathVariable String adminId) throws IOException, DecoderException {
+        s3ImageService.deleteAdminImage(adminId);
+        return ResponseEntity.ok().build();
+    }
     @PostMapping("/v1/admin-user/{adminId}")
     @Operation(summary = "admin 첨부 이미지 > 덮어쓰기")
     @ApiResponses(value = {
@@ -42,16 +53,5 @@ public class ImageController {
         return new ResponseEntity(result, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/v1/admin-user/{adminId}")
-    @Operation(summary = "admin 첨부 이미지 > 삭제")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
-    public ResponseEntity<?> deleteAdminImage(@PathVariable String adminId) throws IOException, DecoderException {
-        s3ImageService.deleteAdminImage(adminId);
-        return ResponseEntity.ok().build();
-    }
 
 }
