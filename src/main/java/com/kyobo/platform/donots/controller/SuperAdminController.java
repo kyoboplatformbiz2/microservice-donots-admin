@@ -3,6 +3,7 @@ package com.kyobo.platform.donots.controller;
 import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.request.DeleteAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,13 +34,13 @@ public class SuperAdminController {
     @Operation(summary = "관리자 생성", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = UserDetails.class))),
+                    content = @Content(schema = @Schema(implementation = AdminUserResponse.class))),
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity createAdminUser(@RequestBody @Valid CreateAdminUserRequest createAdminUserRequest) {
-        UserDetails userDetails = loginService.createAdminUser(createAdminUserRequest);
-        return new ResponseEntity(userDetails, HttpStatus.CREATED);
+        AdminUserResponse adminUserResponse = loginService.createAdminUser(createAdminUserRequest);
+        return new ResponseEntity(adminUserResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/v1/admin-user/{id}")
@@ -59,7 +60,7 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
+    public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) throws Exception {
         loginService.modifyAdminUser(modifyAdminUserRequest);
         return ResponseEntity.ok().build();
     }
@@ -68,12 +69,12 @@ public class SuperAdminController {
     @Operation(summary = "관리자 상세조회", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = UserDetails.class))),
+                    content = @Content(schema = @Schema(implementation = AdminUserResponse.class))),
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity getAdminUser(@PathVariable("id") Long id) {
-        Optional<AdminUser> userDetails = loginService.loadUserByUsername(id);
+    public ResponseEntity getAdminUser(@PathVariable("id") Long id) throws Exception{
+        AdminUserResponse userDetails = loginService.loadUserById(id);
         return new ResponseEntity(userDetails, HttpStatus.OK);
     }
 
@@ -81,13 +82,14 @@ public class SuperAdminController {
     @Operation(summary = "관리자 전체조회", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = UserDetails.class))),
+                    content = @Content(schema = @Schema(implementation = AdminUserResponse.class))),
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity getAdminUserList() {
-        List<AdminUser> userDetails = loginService.getAdminUserAll();
-        return new ResponseEntity(userDetails, HttpStatus.OK);
+        List<AdminUserResponse> userList = loginService.getAdminUserAll();
+
+        return new ResponseEntity(userList, HttpStatus.OK);
     }
 
     @GetMapping("/v1/verification/{adminId}")

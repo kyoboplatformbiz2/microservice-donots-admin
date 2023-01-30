@@ -5,6 +5,7 @@ import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
 import com.kyobo.platform.donots.common.exception.PasswordIncludePersonalInformation;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
 import com.kyobo.platform.donots.model.dto.request.*;
+import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class LoginService implements UserDetailsService {
 
 //    private final HttpSession httpSession;
 
-    public UserDetails createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
+    public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(createAdminUserRequest.getAdminId());
 
         if(adminUser != null)
@@ -59,7 +60,7 @@ public class LoginService implements UserDetailsService {
 
         //httpSession.setAttribute();
 
-        return adminUser;
+        return new AdminUserResponse(adminUser);
     }
 
     @Transactional
@@ -89,7 +90,7 @@ public class LoginService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDetails modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) {
+    public AdminUserResponse modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) throws Exception {
         AdminUser adminUser = adminUserRepository.findByAdminId(modifyAdminUserRequest.getAdminId());
 
         if(adminUser == null)
@@ -97,34 +98,42 @@ public class LoginService implements UserDetailsService {
 
         adminUser.updateModifyAdminUser(modifyAdminUserRequest);
 
-        return adminUser;
+        return new AdminUserResponse(adminUser);
     }
 
 
-    public UserDetails signIn(SignInRequest signInRequest) {
+    public AdminUserResponse signIn(SignInRequest signInRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(signInRequest.getAdminId());
         if(adminUser == null)
             throw new AdminUserNotFoundException();
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-        return adminUser;
+        return new AdminUserResponse(adminUser);
     }
 
+
+
+    public AdminUserResponse loadUserByAmdinId(String adminId) throws UsernameNotFoundException {
+        AdminUser adminUser = adminUserRepository.findByAdminId(adminId);
+        return new AdminUserResponse(adminUser);
+    }
+
+
+    public AdminUserResponse loadUserById(Long id) throws UsernameNotFoundException {
+        AdminUser adminUser = adminUserRepository.findById(id).orElseThrow(()-> new AdminUserNotFoundException());
+        return new AdminUserResponse(adminUser);
+
+
+    }
+
+    public List<AdminUserResponse> getAdminUserAll() {
+        return adminUserRepository.findAll().stream()
+                .map(m -> new AdminUserResponse(m))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AdminUser adminUser = adminUserRepository.findByAdminId(username);
-        return adminUser;
-    }
-
-
-    public Optional<AdminUser> loadUserByUsername(Long id) throws UsernameNotFoundException {
-        Optional<AdminUser> adminUser = adminUserRepository.findById(id);
-        return adminUser;
-    }
-
-    public List<AdminUser> getAdminUserAll() {
-        List<AdminUser> list = adminUserRepository.findAll();
-        return list;
+        return null;
     }
 }
