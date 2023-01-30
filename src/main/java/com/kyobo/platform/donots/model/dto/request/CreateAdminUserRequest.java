@@ -48,12 +48,11 @@ public class CreateAdminUserRequest {
     @Schema(description = "e-mail")
     private String email;
 
-    @NotBlank
     @Schema(description = "메모")
     private String memo;
 
 
-    @NotBlank
+
     @Schema(description = "첨부파일 url")
     private String attachImageUrl;
 
