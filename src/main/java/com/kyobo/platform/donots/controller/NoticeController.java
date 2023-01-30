@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -34,7 +35,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
-    public ResponseEntity noticeRegedit (@RequestBody @Valid NoticeRequest noticeRequest) {
+    public ResponseEntity noticeRegedit (@RequestBody @Valid NoticeRequest noticeRequest) throws IOException {
         Long result = noticeService.noticeRegedit(noticeRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{key}")
