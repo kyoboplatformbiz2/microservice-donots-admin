@@ -30,7 +30,7 @@ public class ImageController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<?> replaceParentProfilePicture(@PathVariable String adminId, @RequestBody MultipartFile multipartFile) throws IOException, DecoderException {
+    public ResponseEntity<?> uploadAdminImage(@PathVariable String adminId, @RequestBody MultipartFile multipartFile) throws IOException, DecoderException {
         if (multipartFile == null)
             throw new RequestBodyEmptyException();
         s3ImageService.uploadAdminImage(adminId, multipartFile);
@@ -44,7 +44,7 @@ public class ImageController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @DeleteMapping("/v1/admin-user/{adminId}")
-    public ResponseEntity<?> deleteParentProfilePicture(@PathVariable String adminId) throws IOException, DecoderException {
+    public ResponseEntity<?> deleteAdminImage(@PathVariable String adminId) throws IOException, DecoderException {
         s3ImageService.deleteAdminImage(adminId);
      return ResponseEntity.ok().build();
     }

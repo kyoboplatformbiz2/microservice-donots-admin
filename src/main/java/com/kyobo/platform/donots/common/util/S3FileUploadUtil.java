@@ -59,7 +59,7 @@ public class S3FileUploadUtil {
             String asIsImageFileName = slashSplittedAsIsImageUrl[slashSplittedAsIsImageUrl.length - 1];
             URLCodec uc = new URLCodec();
             String decodedAsIsImageFileName = uc.decode(asIsImageFileName, "UTF-8");
-            //amazonS3.deleteObject(backendImageBucket, imageDirectoryPathAfterDomain + decodedAsIsImageFileName);
+            amazonS3.deleteObject(backendImageBucket, imageDirectoryPathAfterDomain + decodedAsIsImageFileName);
         }
 
         File toBeImageFile = compressImageFile(multipartFile, toBeImageFileName, fileExt);
