@@ -70,4 +70,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 new ExceptionResponse(new Date(), ex, request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(DefaultException.class)
+    public final ResponseEntity<Object> defaultException(BusinessException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex, request.getDescription(false));
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
