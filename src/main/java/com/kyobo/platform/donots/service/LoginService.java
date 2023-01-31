@@ -10,6 +10,7 @@ import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,7 @@ public class LoginService implements UserDetailsService {
     private final AdminUserRepository adminUserRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    private final S3ImageService s3ImageService;
 //    private final HttpSession httpSession;
 
     public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
@@ -37,7 +39,6 @@ public class LoginService implements UserDetailsService {
 
         if(adminUser != null)
             throw new AlreadyRegisteredIdException();
-
 
         LocalDateTime now = LocalDateTime.now();
         adminUser = AdminUser.builder()
@@ -90,7 +91,7 @@ public class LoginService implements UserDetailsService {
     }
 
     @Transactional
-    public AdminUserResponse modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest) throws Exception {
+    public AdminUserResponse modifyAdminUser(ModifyAdminUserRequest modifyAdminUserRequest){
         AdminUser adminUser = adminUserRepository.findByAdminId(modifyAdminUserRequest.getAdminId());
 
         if(adminUser == null)

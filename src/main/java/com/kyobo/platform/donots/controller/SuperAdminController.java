@@ -59,7 +59,7 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) throws Exception {
+    public ResponseEntity modifyAdminUser (@RequestBody @Valid ModifyAdminUserRequest modifyAdminUserRequest) {
         loginService.modifyAdminUser(modifyAdminUserRequest);
         return ResponseEntity.ok().build();
     }
@@ -72,7 +72,7 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity getAdminUser(@PathVariable("id") Long id) throws Exception{
+    public ResponseEntity getAdminUser(@PathVariable("id") Long id) {
         AdminUserResponse userDetails = loginService.loadUserById(id);
         return new ResponseEntity(userDetails, HttpStatus.OK);
     }
