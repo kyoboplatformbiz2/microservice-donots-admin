@@ -1,14 +1,11 @@
 package com.kyobo.platform.donots.controller;
 
 import com.kyobo.platform.donots.model.dto.request.FaqPostRequest;
-import com.kyobo.platform.donots.model.dto.response.FaqListResponse;
-import com.kyobo.platform.donots.model.dto.response.FaqResponse;
-import com.kyobo.platform.donots.model.dto.response.NoticeResponse;
-import com.kyobo.platform.donots.model.entity.FaqPost;
+import com.kyobo.platform.donots.model.dto.response.FaqPostListResponse;
+import com.kyobo.platform.donots.model.dto.response.FaqPostResponse;
 import com.kyobo.platform.donots.service.FaqPostService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/faq")
@@ -34,21 +30,21 @@ public class FaqPostController {
     @Operation(summary = "FAQ 리스트 조회 ", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = FaqListResponse.class))),
+                    content = @Content(schema = @Schema(implementation = FaqPostListResponse.class))),
     })
     public ResponseEntity<?> findAllFaqPostSummaries() {
         log.info("findAllFaqPostSummaries");
-        return new ResponseEntity(new FaqListResponse(faqPostService.findAllFaqPostSummaries()), HttpStatus.OK);
+        return new ResponseEntity(new FaqPostListResponse(faqPostService.findAllFaqPostSummaries()), HttpStatus.OK);
     }
 
     @GetMapping("/v1/faq-posts/{key}")
     @Operation(summary = "FAQ  상세 조회 ", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                content = @Content(schema = @Schema(implementation = FaqResponse.class))),
+                content = @Content(schema = @Schema(implementation = FaqPostResponse.class))),
     })
     public ResponseEntity<?> findFaqPostDetailsByKey(@PathVariable Long key) {
-        FaqResponse result = faqPostService.findFaqPostDetailsByKey(key);
+        FaqPostResponse result = faqPostService.findFaqPostDetailsByKey(key);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 

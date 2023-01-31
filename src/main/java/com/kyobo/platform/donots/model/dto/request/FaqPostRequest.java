@@ -1,10 +1,12 @@
 package com.kyobo.platform.donots.model.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kyobo.platform.donots.model.entity.FaqCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 public class FaqPostRequest {
@@ -26,4 +28,11 @@ public class FaqPostRequest {
     @Schema(description = "이미지 url")
     private String representativeImgUrl;
 
+    @Schema(description = "게시 시작")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardStartDatetime;
+
+    @Schema(description = "게시 종료")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardEndDatetime;
 }
