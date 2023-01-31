@@ -1,10 +1,10 @@
 package com.kyobo.platform.donots.controller;
 
 import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
-import com.kyobo.platform.donots.model.dto.request.DeleteAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
+import com.kyobo.platform.donots.model.dto.response.AdminUserListResponse;
 import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
-import com.kyobo.platform.donots.model.entity.AdminUser;
+
 import com.kyobo.platform.donots.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,13 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/super/admin")
@@ -82,14 +81,13 @@ public class SuperAdminController {
     @Operation(summary = "관리자 전체조회", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = AdminUserResponse.class))),
+                    content = @Content(schema = @Schema(implementation = AdminUserListResponse.class))),
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
     public ResponseEntity getAdminUserList() {
         List<AdminUserResponse> userList = loginService.getAdminUserAll();
-
-        return new ResponseEntity(userList, HttpStatus.OK);
+        return new ResponseEntity(new AdminUserListResponse(userList), HttpStatus.OK);
     }
 
     @GetMapping("/v1/verification/{adminId}")

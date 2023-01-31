@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class AdminUserResponse {
 
     public AdminUserResponse(){
-
     }
 
     MarkingUtil markingUtil = new MarkingUtil();

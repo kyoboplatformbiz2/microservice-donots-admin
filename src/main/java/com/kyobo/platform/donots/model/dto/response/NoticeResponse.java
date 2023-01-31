@@ -6,7 +6,6 @@ import com.kyobo.platform.donots.model.entity.NoticePost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Getter
