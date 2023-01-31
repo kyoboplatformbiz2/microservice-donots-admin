@@ -32,12 +32,14 @@ public class S3ImageService {
     public String uploadAdminImage(String adminId, MultipartFile multipartFile) throws IOException, SdkClientException, DecoderException {
 
         AdminUser adminUser = adminUserRepository.findByAdminId(adminId);
-        if (adminUser == null) {
-            throw new AdminUserNotFoundException();
-        }
-
         String domain = "adminUser/" + adminId + "/";
-        String attachImageUrl = s3FileUploadUtil.uploadImageToS3AndGetUrl(multipartFile, adminUser.getAttachImageUrl(), domain);
+        String attachImageUrl = null;
+        //신규 등록
+        if (adminUser == null) {
+            attachImageUrl = s3FileUploadUtil.uploadImageToS3AndGetUrl(multipartFile,  "", domain);
+        } else {
+            attachImageUrl = s3FileUploadUtil.uploadImageToS3AndGetUrl(multipartFile,  adminUser.getAttachImageUrl(), domain);
+        }
 
         // 업로드된 이미지 URL을 DB에 저장
         return attachImageUrl;
