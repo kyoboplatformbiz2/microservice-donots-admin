@@ -60,6 +60,10 @@ public class AdminUserResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastPasswordChangeDate;
 
+    @Schema(description = "계정 생성일")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private LocalDateTime createdDate;
+
     public AdminUserResponse(AdminUser adminUser)  {
         this.adminId = adminUser.getAdminId();
         this.adminUserName = markingUtil.nameMasking(adminUser.getAdminUserName());
@@ -75,5 +79,6 @@ public class AdminUserResponse {
         this.reasonsForAuthorization = adminUser.getReasonsForAuthorization();
         this.role = adminUser.getRole();
         this.regeditAdminId = adminUser.getRegeditAdminId();
+        this.createdDate = adminUser.getCreatedDate();
     }
 }
