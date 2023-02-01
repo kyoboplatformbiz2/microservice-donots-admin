@@ -9,6 +9,7 @@ public enum ErrorCode {
 
     ALREADY_REGISTERED_ID(1000, "이미 가입된 아이디입니다"),
     REQUEST_BODY_IS_EMPTY(1001, "요청된 RequestBody의 내용이 없습니다."),
+    TERMS_OF_SERVICE_NOT_FOUND(2201,"존재하지 않는 서비스약관입니다."),
     VALID_PARAMETER(4000, "파라메터 인자값이 정상적이지 않습니다."),
     PASSWORD_INCLUDE_PERSONAL_INFORMATION(4004, "패스워드에 개인정보가 포함되었습니다."),
     DATA_NOT_FOUND(4001, "조회된 데이터가 없습니다."),
