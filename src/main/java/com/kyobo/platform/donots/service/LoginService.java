@@ -5,12 +5,14 @@ import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
 import com.kyobo.platform.donots.common.exception.PasswordIncludePersonalInformation;
 import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
 import com.kyobo.platform.donots.model.dto.request.*;
+import com.kyobo.platform.donots.model.dto.response.AdminUserListResponse;
 import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
 import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.DecoderException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,9 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -127,10 +131,26 @@ public class LoginService implements UserDetailsService {
 
     }
 
-    public List<AdminUserResponse> getAdminUserAll() {
-        return adminUserRepository.findAll().stream()
+    public AdminUserListResponse getAdminUserAll(String search, Pageable pageable, String type) {
+        Page<AdminUser> pageAdminUser;
+        log.info(type);
+        if (type.equals("ADMIN_ID")) {
+            pageAdminUser = adminUserRepository.findByAdminIdContaining(search, pageable);
+        } else if(type.equals("ADMIN_ROLE")){
+            pageAdminUser = adminUserRepository.findByRole(search, pageable);
+        } else if(type.equals("ADMIN_USER_NAME")) {
+            pageAdminUser = adminUserRepository.findByAdminUserNameContaining(search, pageable);
+        } else {
+            pageAdminUser = adminUserRepository.findAll(pageable);
+        }
+
+        List<AdminUserResponse> adminUserList = pageAdminUser.getContent().stream()
                 .map(m -> new AdminUserResponse(m))
                 .collect(Collectors.toList());
+
+        AdminUserListResponse response = new AdminUserListResponse(adminUserList, pageAdminUser.getTotalPages(), pageAdminUser.getTotalElements());
+
+        return response;
     }
 
     @Override

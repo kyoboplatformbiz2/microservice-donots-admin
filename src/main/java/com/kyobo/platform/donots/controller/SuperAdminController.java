@@ -5,6 +5,7 @@ import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.response.AdminUserListResponse;
 import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
 
+import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,13 +14,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -85,9 +84,9 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity getAdminUserList() {
-        List<AdminUserResponse> userList = loginService.getAdminUserAll();
-        return new ResponseEntity(new AdminUserListResponse(userList), HttpStatus.OK);
+    public ResponseEntity getAdminUserList(@RequestParam(required = false) final String search, final String type, final Pageable pageable) {
+        AdminUserListResponse response = loginService.getAdminUserAll(search, pageable, type);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @GetMapping("/v1/verification/{adminId}")
