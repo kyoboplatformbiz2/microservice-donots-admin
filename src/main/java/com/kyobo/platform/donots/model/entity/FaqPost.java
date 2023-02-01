@@ -25,17 +25,24 @@ public class FaqPost {
     private String question;
     private String answer;
     private String representativeImgUrl;
+    private String author;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardStartDatetime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardEndDatetime;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createdDatetime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime lastModifiedDatetime;
+
     public void updateFaqPost(FaqPostRequest faqPostRequest) {
-        LocalDateTime now = LocalDateTime.now();
         this.faqCategory = faqPostRequest.getFaqCategory();
         this.question = faqPostRequest.getQuestion();
         this.answer = faqPostRequest.getAnswer();
         this.representativeImgUrl = faqPostRequest.getRepresentativeImgUrl();
-        this.lastModifiedDatetime = now;
+        this.boardStartDatetime = faqPostRequest.getBoardStartDatetime();
+        this.boardEndDatetime = faqPostRequest.getBoardEndDatetime();
+        this.lastModifiedDatetime = LocalDateTime.now();
     }
 }

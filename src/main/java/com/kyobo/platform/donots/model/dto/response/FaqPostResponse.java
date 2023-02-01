@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
-public class FaqResponse {
+public class FaqPostResponse {
 
     @Schema(description = "게시물 번호")
     private Long key;
@@ -30,20 +30,30 @@ public class FaqResponse {
     @Schema(description = "이미지 url")
     private String representativeImgUrl;
 
+    @Schema(description = "게시 시작")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardStartDatetime;
+
+    @Schema(description = "게시 종료")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime boardEndDatetime;
+
     @Schema(description = "작성일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createdDatetime;
 
     @Schema(description = "최종수정일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime lastModifiedDatetime;
 
-    public FaqResponse(FaqPost faqPost){
+    public FaqPostResponse(FaqPost faqPost){
         this.key = faqPost.getKey();
         this.faqCategory = faqPost.getFaqCategory();
         this.answer = faqPost.getAnswer();
         this.question = faqPost.getQuestion();
         this.representativeImgUrl = faqPost.getRepresentativeImgUrl();
+        this.boardStartDatetime = faqPost.getBoardStartDatetime();
+        this.boardEndDatetime = faqPost.getBoardEndDatetime();
         this.createdDatetime = faqPost.getCreatedDatetime();
         this.lastModifiedDatetime = faqPost.getLastModifiedDatetime();
     }
