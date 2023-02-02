@@ -55,7 +55,7 @@ public class NoticeController {
         noticeService.deleteNotice(noticePostKey);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/v1/notice/post/{noticePostKey}")
+    @PatchMapping("/v1/notice/post/{noticePostKey}")
     @Operation(summary = "공지사항 수정", description = "관리자 공지사항 게시판 수정")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "수정 성공"),
