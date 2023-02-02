@@ -60,7 +60,7 @@ public class DatabaseConfig  {
             e.getMessage();
         }
 
-        if (strHostName.equals("wlfek")) {
+        if (strHostName.equals("wlfek") || strHostName.equals("k2122018")) {
             result = true;
         }
 
