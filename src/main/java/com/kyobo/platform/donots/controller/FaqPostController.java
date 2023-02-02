@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -53,7 +54,7 @@ public class FaqPostController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public ResponseEntity<?> registerFaqPost(@RequestBody FaqPostRequest faqPostRequest) {
+    public ResponseEntity<?> registerFaqPost(@RequestBody @Valid FaqPostRequest faqPostRequest) {
         Long registeredFaqPost = faqPostService.registerFaqPost(faqPostRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{key}")
@@ -67,7 +68,7 @@ public class FaqPostController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public ResponseEntity<?> modifyFaqPost(@PathVariable Long key, @RequestBody FaqPostRequest faqPostRequest) {
+    public ResponseEntity<?> modifyFaqPost(@PathVariable Long key, @RequestBody @Valid FaqPostRequest faqPostRequest) {
         faqPostService.modifyFaqPost(key, faqPostRequest);
         return ResponseEntity.ok().build();
     }
