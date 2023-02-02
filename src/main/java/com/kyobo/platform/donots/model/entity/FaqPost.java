@@ -21,6 +21,7 @@ public class FaqPost {
     @Column(name = "faq_post_key")
     private Long key;
 
+    @Enumerated(EnumType.STRING)
     private FaqCategory faqCategory;
     private String question;
     private String answer;
