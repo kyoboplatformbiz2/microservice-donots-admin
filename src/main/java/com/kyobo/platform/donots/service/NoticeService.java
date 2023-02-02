@@ -99,6 +99,8 @@ public class NoticeService {
                 .body(noticeRequest.getBody())
                 .boardStartDate(noticeRequest.getBoardStartDate())
                 .boardEndDate(noticeRequest.getBoardEndDate())
+                // TODO [Session] 세션에서 ID 가져와서 저장
+                .adminId("dummyAdminId")
                 .createdDate(now)
                 .lastModifiedDate(now)
                 .build();

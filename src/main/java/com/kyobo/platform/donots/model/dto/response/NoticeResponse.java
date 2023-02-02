@@ -25,6 +25,9 @@ public class NoticeResponse {
     @Schema(description = "이미지 주소")
     private String imgUrl;
 
+    @Schema(description = "작성자")
+    private String adminId;
+
     @Schema(description = "작성일시")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createdDate;
@@ -50,6 +53,7 @@ public class NoticeResponse {
         this.title = noticePost.getTitle();
         this.body = noticePost.getBody();
         this.imgUrl = noticePost.getImageUrl();
+        this.adminId = noticePost.getAdminId();
         this.createdDate = noticePost.getCreatedDate();
         this.lastModifiedDate = noticePost.getLastModifiedDate();
         this.boardStartDate = noticePost.getBoardStartDate();
