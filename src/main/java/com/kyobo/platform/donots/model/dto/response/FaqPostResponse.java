@@ -12,31 +12,31 @@ import java.time.LocalDateTime;
 @Getter
 public class FaqPostResponse {
 
-    @Schema(description = "게시물 번호")
+    @Schema(description = "FAQ 키")
     private Long key;
 
-    @Schema(description = "카테고리")
-    @NotNull
+    @Schema(description = "유형")
     private FaqCategory faqCategory;
 
     @Schema(description = "질문")
-    @NotNull
     private String question;
 
     @Schema(description = "답변")
-    @NotNull
     private String answer;
 
-    @Schema(description = "이미지 url")
+    @Schema(description = "대표이미지 URL")
     private String representativeImgUrl;
 
-    @Schema(description = "게시 시작")
+    @Schema(description = "게시시작일시")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardStartDatetime;
 
-    @Schema(description = "게시 종료")
+    @Schema(description = "게시종료일시")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardEndDatetime;
+
+    @Schema(description = "작성자")
+    private String adminId;
 
     @Schema(description = "작성일시")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
@@ -49,11 +49,12 @@ public class FaqPostResponse {
     public FaqPostResponse(FaqPost faqPost){
         this.key = faqPost.getKey();
         this.faqCategory = faqPost.getFaqCategory();
-        this.answer = faqPost.getAnswer();
         this.question = faqPost.getQuestion();
+        this.answer = faqPost.getAnswer();
         this.representativeImgUrl = faqPost.getRepresentativeImgUrl();
         this.boardStartDatetime = faqPost.getBoardStartDatetime();
         this.boardEndDatetime = faqPost.getBoardEndDatetime();
+        this.adminId = faqPost.getAdminId();
         this.createdDatetime = faqPost.getCreatedDatetime();
         this.lastModifiedDatetime = faqPost.getLastModifiedDatetime();
     }

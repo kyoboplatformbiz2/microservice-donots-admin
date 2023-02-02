@@ -25,11 +25,11 @@ public class FaqPost {
     private String question;
     private String answer;
     private String representativeImgUrl;
-    private String author;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardStartDatetime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardEndDatetime;
+    private String adminId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createdDatetime;
