@@ -1,11 +1,14 @@
 package com.kyobo.platform.donots.service;
 
 import com.kyobo.platform.donots.model.dto.request.FaqPostRequest;
+import com.kyobo.platform.donots.model.dto.response.FaqPostListResponse;
 import com.kyobo.platform.donots.model.dto.response.FaqPostResponse;
 import com.kyobo.platform.donots.model.entity.FaqPost;
 import com.kyobo.platform.donots.model.repository.FaqPostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +23,16 @@ public class FaqPostService {
     private final FaqPostRepository faqPostRepository;
 
 
-    public List<FaqPostResponse> findAllFaqPostSummaries() {
-        return faqPostRepository.findAllByOrderByCreatedDatetimeDesc().stream()
+    public FaqPostListResponse findAllFaqPostSummaries(Pageable pageable) {
+
+        Page<FaqPost> pageFaqPost = faqPostRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
+
+        List<FaqPostResponse> faqPostResponseList = pageFaqPost.getContent().stream()
                 .map(m-> new FaqPostResponse(m))
                 .collect(Collectors.toList());
+        FaqPostListResponse response = new FaqPostListResponse(faqPostResponseList, pageFaqPost.getTotalPages(), pageFaqPost.getTotalElements());
+
+        return response;
     }
 
     public FaqPostResponse findFaqPostDetailsByKey(Long key) {

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,11 @@ public class FaqPostController {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = FaqPostListResponse.class))),
     })
-    public ResponseEntity<?> findAllFaqPostSummaries() {
+    public ResponseEntity<?> findAllFaqPostSummaries(final Pageable pageable) {
         log.info("findAllFaqPostSummaries");
-        return new ResponseEntity(new FaqPostListResponse(faqPostService.findAllFaqPostSummaries()), HttpStatus.OK);
+        FaqPostListResponse response = faqPostService.findAllFaqPostSummaries(pageable);
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @GetMapping("/v1/faq-posts/{key}")
