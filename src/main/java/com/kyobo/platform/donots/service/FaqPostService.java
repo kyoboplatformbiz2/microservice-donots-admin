@@ -48,6 +48,8 @@ public class FaqPostService {
                 .question(faqPostRequest.getQuestion())
                 .answer(faqPostRequest.getAnswer())
                 .representativeImgUrl(faqPostRequest.getRepresentativeImgUrl())
+                // TODO [Session] 세션 연동 필요
+                .adminId("dummyAdminId")
                 .boardStartDatetime(faqPostRequest.getBoardStartDatetime())
                 .boardEndDatetime(faqPostRequest.getBoardEndDatetime())
                 .lastModifiedDatetime(now)
