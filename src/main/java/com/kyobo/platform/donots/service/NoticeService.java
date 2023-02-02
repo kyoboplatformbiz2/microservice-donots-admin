@@ -4,6 +4,7 @@ import com.kyobo.platform.donots.common.exception.DataNotFoundException;
 import com.kyobo.platform.donots.common.exception.DefaultException;
 import com.kyobo.platform.donots.config.HttpConfig;
 import com.kyobo.platform.donots.model.dto.request.NoticeRequest;
+import com.kyobo.platform.donots.model.dto.response.NoticeListResponse;
 import com.kyobo.platform.donots.model.dto.response.NoticeResponse;
 import com.kyobo.platform.donots.model.entity.NoticePost;
 import com.kyobo.platform.donots.model.repository.NoticePostRepository;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,10 +70,18 @@ public class NoticeService {
 
         return foundNoticePost.getNoticePostKey();
     }
-    public List<NoticeResponse> getNoticeList() {
-        return noticePostRepository.findAllByOrderByCreatedDateDesc().stream()
+    public NoticeListResponse getNoticeList(Pageable pageable) {
+
+        Page<NoticePost> postPage = noticePostRepository.findAllByOrderByCreatedDateDesc(pageable);
+
+        List<NoticeResponse> noticeResponseList = postPage.getContent().stream()
                 .map(m-> new NoticeResponse(m))
                 .collect(Collectors.toList());
+
+        NoticeListResponse response = new NoticeListResponse(noticeResponseList, postPage.getTotalPages(), postPage.getTotalElements());
+
+
+        return response;
     }
     public NoticeResponse getNoticeDetail(Long noticePostKey) {
         NoticePost noticePost = noticePostRepository.findByNoticePostKey(noticePostKey);

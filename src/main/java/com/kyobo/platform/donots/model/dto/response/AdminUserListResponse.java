@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 
+
 @Getter
 public class AdminUserListResponse {
     public AdminUserListResponse(){
@@ -19,7 +20,7 @@ public class AdminUserListResponse {
 
     @Schema(description = "게시물수")
     private Long totalElements;
-    
+
     public AdminUserListResponse(List<AdminUserResponse> adminUserListResponse, int totalPage, long totalElements){
         this.adminUserListResponse = adminUserListResponse;
         this.totalElements = totalElements;
@@ -27,4 +28,3 @@ public class AdminUserListResponse {
     }
 
 }
-

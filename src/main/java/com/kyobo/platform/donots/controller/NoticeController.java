@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +87,8 @@ public class NoticeController {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = NoticeListResponse.class))),
     })
-    public ResponseEntity getNoticeList () {
-        return new ResponseEntity(new NoticeListResponse(noticeService.getNoticeList()), HttpStatus.OK);
+    public ResponseEntity getNoticeList (final Pageable pageable) {
+        NoticeListResponse response = noticeService.getNoticeList(pageable) ;
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }
