@@ -1,12 +1,8 @@
 package com.kyobo.platform.donots.controller;
 
-import com.kyobo.platform.donots.model.dto.request.NoticeRequest;
 import com.kyobo.platform.donots.model.dto.request.TermsOfServiceRequest;
-import com.kyobo.platform.donots.model.dto.response.NoticeListResponse;
-import com.kyobo.platform.donots.model.dto.response.NoticeResponse;
 import com.kyobo.platform.donots.model.dto.response.TermsOfServiceListResponse;
 import com.kyobo.platform.donots.model.dto.response.TermsOfServiceResponse;
-import com.kyobo.platform.donots.service.NoticeService;
 import com.kyobo.platform.donots.service.TermsOfServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -87,26 +83,46 @@ public class TermsOfServiceController {
         return new ResponseEntity(termsOfServiceResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/v1/terms-of-services/by-title/{title}")
-    @Operation(summary = "최신 서비스약관 > 조회", description = "")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = TermsOfServiceResponse.class))),
-            @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
-            @ApiResponse(responseCode = "500", description = "실패")
-    })
-    public ResponseEntity findMostRecentTermsOfServiceByTitle (@PathVariable String title) {
-        TermsOfServiceResponse termsOfServiceResponse = termsOfServiceService.findMostRecentTermsOfServiceByTitle(title);
-        return new ResponseEntity(termsOfServiceResponse, HttpStatus.OK);
-    }
+//    @GetMapping("/v1/terms-of-services/by-title/{title}")
+//    @Operation(summary = "최신 서비스약관 > 조회", description = "")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "성공",
+//                    content = @Content(schema = @Schema(implementation = TermsOfServiceResponse.class))),
+//            @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
+//            @ApiResponse(responseCode = "500", description = "실패")
+//    })
+//    public ResponseEntity findMostRecentTermsOfServiceByTitle (@PathVariable String title) {
+//        TermsOfServiceResponse termsOfServiceResponse = termsOfServiceService.findMostRecentTermsOfServiceByTitle(title);
+//        return new ResponseEntity(termsOfServiceResponse, HttpStatus.OK);
+//    }
 
     @GetMapping("/v1/terms-of-services")
-    @Operation(summary = "모든 서비스약관 > 조회", description = "")
+    @Operation(summary = "[Test] 모든 서비스약관 > 조회", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = TermsOfServiceListResponse.class))),
     })
     public ResponseEntity findAllByOrderByCreatedDatetimeDesc () {
         return new ResponseEntity(new TermsOfServiceListResponse(termsOfServiceService.findAllByOrderByCreatedDatetimeDesc()), HttpStatus.OK);
+    }
+
+    @GetMapping("/v1/terms-of-services/partitioned-by-title-most-recent")
+    @Operation(summary = "제목별 최신 서비스약관 > 조회", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(schema = @Schema(implementation = TermsOfServiceListResponse.class))),
+    })
+    public ResponseEntity findPartitionedByTitleMostRecent() {
+        return new ResponseEntity(new TermsOfServiceListResponse(termsOfServiceService.findPartitionedByTitleMostRecent()), HttpStatus.OK);
+    }
+
+    @GetMapping("/v1/terms-of-services/by-title/{title}")
+    @Operation(summary = "서비스약관 > 조회 by title", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(schema = @Schema(implementation = TermsOfServiceListResponse.class))),
+    })
+    public ResponseEntity findByTitle(@PathVariable String title) {
+        return new ResponseEntity(new TermsOfServiceListResponse(termsOfServiceService.findByTitle(title)), HttpStatus.OK);
     }
 }
