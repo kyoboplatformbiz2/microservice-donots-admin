@@ -72,16 +72,16 @@ public class NoticeService {
         return foundNoticePost.getNoticePostKey();
     }
 
-    public NoticeListResponse getNoticeList(String searchTerm, Pageable pageable) {
+    public NoticeListResponse findNoticePostsFiltered(String searchTerm, Pageable pageable) {
 
         Page<NoticePost> postPage;
         if (StringUtils.hasText(searchTerm))
             postPage = noticePostRepository.findByTitleContainingOrBodyContainingOrderByCreatedDateDesc(searchTerm, searchTerm, pageable);
         else
-            postPage = noticePostRepository.findByOrderByCreatedDateDesc(pageable);
+            postPage = noticePostRepository.findAllByOrderByCreatedDateDesc(pageable);
 
         List<NoticeResponse> noticeResponseList = postPage.getContent().stream()
-                .map(m-> new NoticeResponse(m))
+                .map(m -> new NoticeResponse(m))
                 .collect(Collectors.toList());
 
         NoticeListResponse response = new NoticeListResponse(noticeResponseList, postPage.getTotalPages(), postPage.getTotalElements());
