@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,9 +71,14 @@ public class NoticeService {
 
         return foundNoticePost.getNoticePostKey();
     }
-    public NoticeListResponse getNoticeList(Pageable pageable) {
 
-        Page<NoticePost> postPage = noticePostRepository.findAllByOrderByCreatedDateDesc(pageable);
+    public NoticeListResponse getNoticeList(String searchTerm, Pageable pageable) {
+
+        Page<NoticePost> postPage;
+        if (StringUtils.hasText(searchTerm))
+            postPage = noticePostRepository.findByTitleContainingOrBodyContainingOrderByCreatedDateDesc(searchTerm, searchTerm, pageable);
+        else
+            postPage = noticePostRepository.findByOrderByCreatedDateDesc(pageable);
 
         List<NoticeResponse> noticeResponseList = postPage.getContent().stream()
                 .map(m-> new NoticeResponse(m))
@@ -80,9 +86,9 @@ public class NoticeService {
 
         NoticeListResponse response = new NoticeListResponse(noticeResponseList, postPage.getTotalPages(), postPage.getTotalElements());
 
-
         return response;
     }
+
     public NoticeResponse getNoticeDetail(Long noticePostKey) {
         NoticePost noticePost = noticePostRepository.findByNoticePostKey(noticePostKey);
         return new NoticeResponse(noticePost);
