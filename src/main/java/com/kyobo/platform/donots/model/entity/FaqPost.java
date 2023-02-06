@@ -24,6 +24,7 @@ public class FaqPost {
     @Enumerated(EnumType.STRING)
     private FaqCategory faqCategory;
     private String question;
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String answer;
     private String representativeImgUrl;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")

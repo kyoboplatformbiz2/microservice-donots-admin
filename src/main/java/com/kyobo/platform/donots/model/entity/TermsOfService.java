@@ -21,6 +21,7 @@ public class TermsOfService {
     @Column(name = "terms_of_service_key")
     private Long key;
     private String title;
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String body;
     private String version;
     private String adminId;

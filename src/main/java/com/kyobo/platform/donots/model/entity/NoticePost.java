@@ -24,7 +24,7 @@ public class NoticePost {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "BODY", nullable = false)
+    @Column(name = "BODY", columnDefinition = "TEXT", nullable = false)
     private String body;
 
     @Column(name = "IMAGE_URL")
