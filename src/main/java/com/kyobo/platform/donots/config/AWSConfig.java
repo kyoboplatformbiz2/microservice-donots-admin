@@ -30,13 +30,13 @@ public class AWSConfig {
 
     //s3 사용을 위한 인증
     public AmazonS3 amazonS3(String region, String env_active) throws IOException {
-        String accessKey = load_property().getProperty("accessKey");
-        String secretKey = load_property().getProperty("secretKey");
-        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+//        String accessKey = load_property().getProperty("accessKey");
+//        String secretKey = load_property().getProperty("secretKey");
+//        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
         AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard()
                 .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+//                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
 
         return amazonS3;
