@@ -13,4 +13,6 @@ import java.util.List;
 public interface FaqPostRepository extends JpaRepository<FaqPost, Long> {
     List<FaqPost> findByFaqCategory(FaqCategory faqCategory);
     Page<FaqPost> findAllByOrderByCreatedDatetimeDesc(Pageable pageable);
+
+    Page<FaqPost> findByQuestionContainingOrAnswerContainingOrderByCreatedDatetimeDesc(String searchQuestion, String searchAnswer, Pageable pageable);
 }

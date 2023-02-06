@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,14 +23,18 @@ import java.util.stream.Collectors;
 public class FaqPostService {
     private final FaqPostRepository faqPostRepository;
 
+    public FaqPostListResponse findFaqPostsFiltered(String searchTerm, Pageable pageable) {
 
-    public FaqPostListResponse findAllFaqPostSummaries(Pageable pageable) {
-
-        Page<FaqPost> pageFaqPost = faqPostRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
+        Page<FaqPost> pageFaqPost;
+        if (StringUtils.hasText(searchTerm))
+            pageFaqPost = faqPostRepository.findByQuestionContainingOrAnswerContainingOrderByCreatedDatetimeDesc(searchTerm, searchTerm, pageable);
+        else
+            pageFaqPost = faqPostRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
 
         List<FaqPostResponse> faqPostResponseList = pageFaqPost.getContent().stream()
-                .map(m-> new FaqPostResponse(m))
+                .map(m -> new FaqPostResponse(m))
                 .collect(Collectors.toList());
+
         FaqPostListResponse response = new FaqPostListResponse(faqPostResponseList, pageFaqPost.getTotalPages(), pageFaqPost.getTotalElements());
 
         return response;

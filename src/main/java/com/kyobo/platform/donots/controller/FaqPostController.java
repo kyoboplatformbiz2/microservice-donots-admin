@@ -34,9 +34,10 @@ public class FaqPostController {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = FaqPostListResponse.class))),
     })
-    public ResponseEntity<?> findAllFaqPostSummaries(final Pageable pageable) {
+    public ResponseEntity<?> findFaqPostsFiltered(@RequestParam(required = false) String searchTerm, final Pageable pageable) {
         log.info("findAllFaqPostSummaries");
-        FaqPostListResponse response = faqPostService.findAllFaqPostSummaries(pageable);
+
+        FaqPostListResponse response = faqPostService.findFaqPostsFiltered(searchTerm, pageable);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
