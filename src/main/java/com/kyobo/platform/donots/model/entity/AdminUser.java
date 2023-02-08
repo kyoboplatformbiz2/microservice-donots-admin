@@ -71,6 +71,9 @@ public class AdminUser implements UserDetails {
     @Column(name = "REGEDIT_ADMIN_ID")
     private String regeditAdminId;
 
+    @Column(name = "SESSION_ID")
+    private String sessionId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
@@ -131,6 +134,14 @@ public class AdminUser implements UserDetails {
 
     public void updateAttachImageUrl(String attachImageUrl){
         this.attachImageUrl = attachImageUrl;
+    }
+
+    public void updateSessionId(String sessionId){
+        this.sessionId = sessionId;
+    }
+
+    public void updateLastPasswordChangeDate() {
+        this.lastPasswordChangeDate = LocalDateTime.now();
     }
 }
 

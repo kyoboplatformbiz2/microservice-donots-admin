@@ -51,6 +51,12 @@ public class AdminUserResponse {
     @Schema(description = "사유")
     private String reasonsForAuthorization;
 
+    @Schema(description = "헤더정보")
+    private String headerInfo;
+
+    @Schema(description = "3개월 패스워드 변경 flag")
+    private Boolean isPasswordChangeFlag;
+
     @Schema(description = "마지막 접속 일")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastSignInDate;
@@ -79,5 +85,12 @@ public class AdminUserResponse {
         this.role = adminUser.getRole();
         this.regeditAdminId = adminUser.getRegeditAdminId();
         this.createdDate = adminUser.getCreatedDate();
+        this.headerInfo = adminUser.getSessionId();
+
+        if (adminUser.getLastPasswordChangeDate().plusMonths(3).isBefore(LocalDateTime.now()))
+            this.isPasswordChangeFlag = true;
+        else
+            this.isPasswordChangeFlag = false;
+
     }
 }

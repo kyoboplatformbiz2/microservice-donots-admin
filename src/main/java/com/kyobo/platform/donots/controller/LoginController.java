@@ -50,4 +50,19 @@ public class LoginController {
         AdminUserResponse result = loginService.signIn(signInRequest);
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+    @PatchMapping("/v1/password/initialization/{id}")
+    @Operation(summary = "3개월 패스워드 연장 ", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다."),
+            @ApiResponse(responseCode = "4002", description = "조회된 어드민 유저가 없습니다"),
+            @ApiResponse(responseCode = "5000", description = "패스워드가 맞지 않습니다")
+    })
+    public ResponseEntity passwordInitialization(@PathVariable Long id) {
+        loginService.passwordInitialization(id);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
