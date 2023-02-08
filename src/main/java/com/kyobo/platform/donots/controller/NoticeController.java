@@ -87,8 +87,11 @@ public class NoticeController {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = NoticeListResponse.class))),
     })
-    public ResponseEntity getNoticeList (final Pageable pageable) {
-        NoticeListResponse response = noticeService.getNoticeList(pageable) ;
+    public ResponseEntity findNoticePostsFiltered(@RequestParam(required = false) String searchTerm, final Pageable pageable) {
+        log.info("NoticeController.getNoticeList()");
+
+        NoticeListResponse response = noticeService.findNoticePostsFiltered(searchTerm, pageable);
+
         return new ResponseEntity(response, HttpStatus.OK);
     }
 }

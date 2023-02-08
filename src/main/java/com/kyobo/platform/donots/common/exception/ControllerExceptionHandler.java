@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.common.exception;
 
+import com.amazonaws.services.organizations.model.ParentNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,16 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex, request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 회원
+    //------------------------------------------------------------------------------------------------------------------
+    @ExceptionHandler(ParentNotFoundException.class)
+    public final ResponseEntity<Object> parentNotFoundException(BusinessException be, WebRequest request) {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), be, request.getDescription(false));
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     //------------------------------------------------------------------------------------------------------------------

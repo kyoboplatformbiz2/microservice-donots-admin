@@ -24,13 +24,13 @@ public class NoticePost {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "BODY", nullable = false)
+    @Column(name = "BODY", columnDefinition = "TEXT", nullable = false)
     private String body;
 
-    @Column(name = "IMAGE_URL", nullable = false)
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
-    @Column(name = "ADMIN_ID", nullable = false)
+    @Column(name = "ADMIN_ID")
     private String adminId;
 
     @Column(name = "CREATED_DATE", nullable = false)
@@ -41,11 +41,11 @@ public class NoticePost {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime lastModifiedDate;
 
-    @Column(name = "BOARD_START_DATE", nullable = false)
+    @Column(name = "BOARD_START_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardStartDate;
 
-    @Column(name = "BOARD_END_DATE", nullable = false)
+    @Column(name = "BOARD_END_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardEndDate;
 

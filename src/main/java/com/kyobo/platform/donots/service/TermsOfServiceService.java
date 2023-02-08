@@ -3,9 +3,7 @@ package com.kyobo.platform.donots.service;
 import com.amazonaws.util.CollectionUtils;
 import com.kyobo.platform.donots.common.exception.TermsOfServiceNotFoundException;
 import com.kyobo.platform.donots.model.dto.request.TermsOfServiceRequest;
-import com.kyobo.platform.donots.model.dto.response.FaqPostResponse;
 import com.kyobo.platform.donots.model.dto.response.TermsOfServiceResponse;
-import com.kyobo.platform.donots.model.entity.FaqPost;
 import com.kyobo.platform.donots.model.entity.TermsOfService;
 import com.kyobo.platform.donots.model.repository.TermsOfServiceRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +31,8 @@ public class TermsOfServiceService {
                 .title(termsOfServiceRequest.getTitle())
                 .body(termsOfServiceRequest.getBody())
                 .version(termsOfServiceRequest.getVersion())
-                .adminId(termsOfServiceRequest.getAdminId())
+                // TODO [Session] 세션 처리 필요
+                .adminId("dummyAdminId")
                 .postingStartDatetime(termsOfServiceRequest.getPostingStartDatetime())
                 .postingEndDatetime(termsOfServiceRequest.getPostingEndDatetime())
                 .createdDatetime(now)
@@ -76,8 +75,22 @@ public class TermsOfServiceService {
         return new TermsOfServiceResponse(termsOfServices.get(0));
     }
 
+    public List<TermsOfServiceResponse> findByTitle(String title) {
+        return termsOfServiceRepository.findByTitleOrderByCreatedDatetimeDesc(title).stream()
+                .map(m -> new TermsOfServiceResponse(m))
+                .collect(Collectors.toList());
+    }
+
     public List<TermsOfServiceResponse> findAllByOrderByCreatedDatetimeDesc() {
         return termsOfServiceRepository.findAllByOrderByCreatedDatetimeDesc().stream()
+                .map(m -> new TermsOfServiceResponse(m))
+                .collect(Collectors.toList());
+    }
+
+    public List<TermsOfServiceResponse> findPartitionedByTitleMostRecent(/*String title*/) {
+        System.out.println("TermsOfServiceService.findPartitionedByTitleMostRecent");
+
+        return termsOfServiceRepository.findPartitionedByTitleMostRecent().stream()
                 .map(m -> new TermsOfServiceResponse(m))
                 .collect(Collectors.toList());
     }
