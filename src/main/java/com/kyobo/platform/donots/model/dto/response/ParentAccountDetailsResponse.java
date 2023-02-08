@@ -2,6 +2,7 @@ package com.kyobo.platform.donots.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kyobo.platform.donots.common.util.AES256Util;
+import com.kyobo.platform.donots.common.util.MarkingUtil;
 import com.kyobo.platform.donots.model.entity.service.account.Account;
 import com.kyobo.platform.donots.model.entity.service.account.SocialAccount;
 import com.kyobo.platform.donots.model.entity.service.parent.Baby;
@@ -49,20 +50,22 @@ public class ParentAccountDetailsResponse {
             babyDtosFromEntity.add(BabyDto.from(baby));
 
         List<SocialAccountForMemberDetailsDto> socialAccountDtosFromEntity = new ArrayList<>();
-        for (SocialAccount sa : socialAccounts)
-            socialAccountDtosFromEntity.add(SocialAccountForMemberDetailsDto.from(sa));
+        for (int i = 0; i < socialAccounts.size(); i++) {
+            socialAccountDtosFromEntity.add(SocialAccountForMemberDetailsDto.from(socialAccounts.get(i)));
+            socialAccountDtosFromEntity.get(i).setEmail(new MarkingUtil().emailMasking(socialAccountDtosFromEntity.get(i).getEmail()));
+        }
 
         return ParentAccountDetailsResponse.builder()
                 .type(parent.getType())
-                .nickname(parent.getNickname())
-                .email(parent.getEmail())
+                .nickname(new MarkingUtil().nicknameMasking(parent.getNickname()))
+                .email(new MarkingUtil().emailMasking(parent.getEmail()))
                 .babies(babyDtosFromEntity)
-                .id(account.getId())
-                .name(AES256Util.decrypt(account.getName()))
+                .id(new MarkingUtil().idMasking(account.getId()))
+                .name(new MarkingUtil().nameMasking(AES256Util.decrypt(account.getName())))
                 .gender(account.getGender())
                 .birthDay(account.getBirthDay())
                 .createdAt(account.getCreatedAt())
-                .phoneNumber(AES256Util.decrypt(account.getPhoneNumber()))
+                .phoneNumber(new MarkingUtil().phoneMasking(AES256Util.decrypt(account.getPhoneNumber())))
                 .lastSignInAt(account.getLastSignInAt())
                 .socialAccounts(socialAccountDtosFromEntity)
                 .build();
