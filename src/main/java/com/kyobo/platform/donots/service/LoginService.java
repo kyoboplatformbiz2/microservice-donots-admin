@@ -1,18 +1,21 @@
 package com.kyobo.platform.donots.service;
 
-import com.kyobo.platform.donots.common.exception.AdminUserNotFoundException;
-import com.kyobo.platform.donots.common.exception.AlreadyRegisteredIdException;
-import com.kyobo.platform.donots.common.exception.PasswordIncludePersonalInformation;
-import com.kyobo.platform.donots.common.exception.PasswordNotMatchException;
+import com.kyobo.platform.donots.common.exception.*;
+import com.kyobo.platform.donots.config.HttpConfig;
 import com.kyobo.platform.donots.model.dto.request.*;
-import com.kyobo.platform.donots.model.dto.response.AdminUserListResponse;
-import com.kyobo.platform.donots.model.dto.response.AdminUserResponse;
+import com.kyobo.platform.donots.model.dto.response.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
+import com.kyobo.platform.donots.model.entity.NoticePost;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
+import com.kyobo.platform.donots.model.repository.NoticePostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,11 +23,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 
@@ -36,7 +44,7 @@ public class LoginService implements UserDetailsService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     private final S3ImageService s3ImageService;
-//    private final HttpSession httpSession;
+    private final HttpSession httpSession;
 
     public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(createAdminUserRequest.getAdminId());
@@ -58,6 +66,7 @@ public class LoginService implements UserDetailsService {
                 .role(createAdminUserRequest.getRole())
                 .attachImageUrl(createAdminUserRequest.getAttachImageUrl())
                 .memo(createAdminUserRequest.getMemo())
+                .lastPasswordChangeDate(now)
                 .createdDate(now)
                 .lastSignInDate(now)
                 .build();
@@ -113,6 +122,11 @@ public class LoginService implements UserDetailsService {
             throw new AdminUserNotFoundException();
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
+
+        adminUser.updateSessionId(adminUser.getSessionId());
+        httpSession.setAttribute(adminUser.getAdminId(), "");
+
+
         return new AdminUserResponse(adminUser);
     }
 
@@ -127,13 +141,9 @@ public class LoginService implements UserDetailsService {
     public AdminUserResponse loadUserById(Long id) throws UsernameNotFoundException {
         AdminUser adminUser = adminUserRepository.findById(id).orElseThrow(()-> new AdminUserNotFoundException());
         return new AdminUserResponse(adminUser);
-
-
     }
-
     public AdminUserListResponse getAdminUserAll(String search, Pageable pageable, String type) {
         Page<AdminUser> pageAdminUser;
-        log.info(type);
         if (type.equals("ADMIN_ID")) {
             pageAdminUser = adminUserRepository.findByAdminIdContaining(search, pageable);
         } else if(type.equals("ADMIN_ROLE")){
@@ -156,5 +166,11 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
+    }
+
+    @Transactional
+    public void passwordInitialization(Long id) {
+        AdminUser adminUser = adminUserRepository.findById(id).orElseThrow(()-> new AdminUserNotFoundException());
+        adminUser.updateLastPasswordChangeDate();
     }
 }
