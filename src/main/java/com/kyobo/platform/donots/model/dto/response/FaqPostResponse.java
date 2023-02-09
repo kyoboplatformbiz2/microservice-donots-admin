@@ -6,7 +6,6 @@ import com.kyobo.platform.donots.model.entity.FaqPost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,22 +27,22 @@ public class FaqPostResponse {
     private String representativeImgUrl;
 
     @Schema(description = "게시시작일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime boardStartDatetime;
 
     @Schema(description = "게시종료일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime boardEndDatetime;
 
     @Schema(description = "작성자")
     private String adminId;
 
     @Schema(description = "작성일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDatetime;
 
     @Schema(description = "최종수정일시")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastModifiedDatetime;
 
     public FaqPostResponse(FaqPost faqPost){
