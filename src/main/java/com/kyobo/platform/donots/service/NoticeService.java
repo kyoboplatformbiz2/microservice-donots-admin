@@ -94,8 +94,15 @@ public class NoticeService {
         return new NoticeResponse(noticePost);
     }
 
-    public void deleteNotice(Long noticePostKey) {
+    public void deleteNotice(Long noticePostKey) throws IOException {
+        // TODO 해당 공지사항 없을 때 예외처리
         noticePostRepository.deleteById(noticePostKey);
+
+        // 홈 > 알림 API 호출 시작
+        String recipeurl = loadProperty().getProperty("recipeurl");
+        String url = recipeurl + "/v1/recipe/main/deleteNoti/" + noticePostKey;
+        new HttpConfig().callApi(new JSONObject(), url, HttpMethod.DELETE.name());
+        // 홈 > 알림 API 호출 끝
     }
 
     @Transactional

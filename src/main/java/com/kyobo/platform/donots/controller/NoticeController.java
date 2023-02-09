@@ -52,7 +52,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
-    public ResponseEntity deleteNotice(@PathVariable("noticePostKey") Long noticePostKey) {
+    public ResponseEntity deleteNotice(@PathVariable("noticePostKey") Long noticePostKey) throws IOException {
         noticeService.deleteNotice(noticePostKey);
         return ResponseEntity.ok().build();
     }
