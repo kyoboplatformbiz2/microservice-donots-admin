@@ -2,16 +2,13 @@ package com.kyobo.platform.donots.model.dto.response;
 
 import com.kyobo.platform.donots.model.entity.service.account.ProviderType;
 import com.kyobo.platform.donots.model.entity.service.account.SocialAccount;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Data
 @Slf4j
 public class SocialAccountForMemberDetailsDto {
     private Long accountKey;

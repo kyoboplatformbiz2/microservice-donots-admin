@@ -6,8 +6,10 @@ import com.kyobo.platform.donots.model.entity.service.parent.ParentGrade;
 import com.kyobo.platform.donots.model.entity.service.parent.ParentType;
 import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchCondition;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import static com.kyobo.platform.donots.model.entity.service.account.QAccount.ac
 import static com.kyobo.platform.donots.model.entity.service.parent.QParent.parent;
 import static org.springframework.util.StringUtils.hasText;
 
+@Slf4j
 public class ParentRepositoryImpl implements ParentRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -30,6 +33,14 @@ public class ParentRepositoryImpl implements ParentRepositoryCustom {
 
     @Override
     public Page<ParentAccountResponse> search(ParentAccountSearchCondition condition, Pageable pageable) {
+
+        // TODO 추후 PageRequest 사용하도록 개선
+        OrderSpecifier<LocalDateTime> orderSpecifier;
+        switch (condition.getOrderingCriterion()) {
+            case CREATED_AT_DESC -> orderSpecifier = account.createdAt.desc();
+            case LAST_LOGIN_AT_DESC -> orderSpecifier = account.lastSignInAt.desc();
+            default -> orderSpecifier = account.createdAt.desc();
+        }
 
         QueryResults<ParentAccountResponse> results = queryFactory
                 .select(new QParentAccountResponse(
@@ -57,6 +68,7 @@ public class ParentRepositoryImpl implements ParentRepositoryCustom {
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(orderSpecifier)
                 .fetchResults();
 
         List<ParentAccountResponse> content = results.getResults();

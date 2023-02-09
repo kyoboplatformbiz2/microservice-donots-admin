@@ -94,4 +94,49 @@ public class MarkingUtil {
         }
         return birthday;
     }
+
+    public static String idMasking(String id) {
+        return koreanEnglishNumberSignMasking(id, 4);
+    }
+
+    public static String nicknameMasking(String nickname) {
+        return koreanEnglishNumberSignMasking(nickname, 4);
+    }
+
+    private static String koreanEnglishNumberSignMasking(String stringToMask, int numOfMiddleLettersToMask){
+        String regex = "(^[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣0-9\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"]+)$";
+
+        Matcher matcher = Pattern.compile(regex).matcher(stringToMask);
+        if(matcher.find()) {
+            final int NUM_OF_LEADING_NON_MASKING_LETTERS = 1;
+
+            String middleLettersToMask = "";
+            int middleLettersToMaskLength = 0;
+            if (stringToMask.length() > numOfMiddleLettersToMask) {
+                middleLettersToMask = stringToMask.substring(NUM_OF_LEADING_NON_MASKING_LETTERS, numOfMiddleLettersToMask + 1);
+                middleLettersToMaskLength = middleLettersToMask.length();
+            } else {
+                middleLettersToMaskLength = stringToMask.length();
+            }
+
+            String maskingSignsOfMatchingCount = "";
+            for(int i = 0; i < middleLettersToMaskLength; i++) {
+                maskingSignsOfMatchingCount += "*";
+            }
+
+            // 마스킹 대상 문자수가 마스킹 해야될 자릿수 이하이면 전부 마스킹한다.
+            if(stringToMask.length() <= numOfMiddleLettersToMask) {
+                return stringToMask.replace(stringToMask, maskingSignsOfMatchingCount);
+            } else {
+                String maskedString =
+                        stringToMask.substring(0, NUM_OF_LEADING_NON_MASKING_LETTERS)
+                                + middleLettersToMask.replace(middleLettersToMask, maskingSignsOfMatchingCount)
+                                + stringToMask.substring(NUM_OF_LEADING_NON_MASKING_LETTERS + numOfMiddleLettersToMask);
+
+                return maskedString;
+            }
+        }
+
+        return stringToMask;
+    }
 }
