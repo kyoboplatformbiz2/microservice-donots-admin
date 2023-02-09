@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+import static com.kyobo.platform.donots.model.repository.searchcondition.OrderingCriterion.CREATED_AT_DESC;
+
 @Data
 public class ParentAccountSearchCondition {
 
@@ -21,4 +23,5 @@ public class ParentAccountSearchCondition {
     private String phoneNumber;
     private String email;
     private Long key;
+    private OrderingCriterion orderingCriterion = CREATED_AT_DESC;
 }
