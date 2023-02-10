@@ -61,7 +61,7 @@ public class CreateAdminUserRequest {
     @Schema(description = "권한 부여 사유")
     private String reasonsForAuthorization;
 
-    @NotBlank
+
     @Schema(description = "등록한 관리자 ID")
     private String regeditAdminId;
 
