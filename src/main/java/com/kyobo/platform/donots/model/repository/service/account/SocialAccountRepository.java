@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SocialAccountRepository extends JpaRepository<SocialAccount, Long> {
-    SocialAccount findBySocialAccountId(String socialAccountId);
-
     List<SocialAccount> findByAccountKey(Long accountKey);
 }
 

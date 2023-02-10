@@ -9,15 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Account findById(String id);
-    Account findByIdAndCi(String id, String ci);
     Account findByAccountKey(Long key);
-    Account findByCiAndPhoneNumber(String ci, String phoneNumber);
-    Account findByCi(String ci);
-    boolean existsByCi(String ci);
-    boolean existsById(String id);
-
-    boolean existsByIdAndCi(String id, String ci);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Account a SET a.password = :password where a.id = :id and a.ci = :ci")
