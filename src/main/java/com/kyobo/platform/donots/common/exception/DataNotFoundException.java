@@ -1,8 +1,5 @@
 package com.kyobo.platform.donots.common.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 public class DataNotFoundException extends BusinessException {
 
     public DataNotFoundException() {

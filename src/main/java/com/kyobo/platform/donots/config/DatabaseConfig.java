@@ -1,7 +1,7 @@
 package com.kyobo.platform.donots.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.classfile.ExceptionTable;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.sql.DataSource;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+
 
 @EnableJpaAuditing
 @Configuration

@@ -1,21 +1,16 @@
 package com.kyobo.platform.donots.service;
 
 import com.kyobo.platform.donots.common.exception.*;
-import com.kyobo.platform.donots.config.HttpConfig;
+
 import com.kyobo.platform.donots.model.dto.request.*;
 import com.kyobo.platform.donots.model.dto.response.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
-import com.kyobo.platform.donots.model.entity.NoticePost;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
-import com.kyobo.platform.donots.model.repository.NoticePostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,15 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 
@@ -43,7 +35,6 @@ public class LoginService implements UserDetailsService {
     private final AdminUserRepository adminUserRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    private final S3ImageService s3ImageService;
     private final HttpSession httpSession;
 
     public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
@@ -150,9 +141,12 @@ public class LoginService implements UserDetailsService {
             pageAdminUser = adminUserRepository.findByRole(search, pageable);
         } else if(type.equals("ADMIN_USER_NAME")) {
             pageAdminUser = adminUserRepository.findByAdminUserNameContaining(search, pageable);
+        } else if(type.equals("ALL")) {
+            pageAdminUser = adminUserRepository.findAll(pageable);
         } else {
             pageAdminUser = adminUserRepository.findAll(pageable);
         }
+
 
         List<AdminUserResponse> adminUserList = pageAdminUser.getContent().stream()
                 .map(m -> new AdminUserResponse(m))

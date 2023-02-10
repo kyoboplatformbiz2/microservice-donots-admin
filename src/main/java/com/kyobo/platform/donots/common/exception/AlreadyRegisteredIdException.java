@@ -1,8 +1,5 @@
 package com.kyobo.platform.donots.common.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 public class AlreadyRegisteredIdException extends BusinessException {
 
     public AlreadyRegisteredIdException() {
