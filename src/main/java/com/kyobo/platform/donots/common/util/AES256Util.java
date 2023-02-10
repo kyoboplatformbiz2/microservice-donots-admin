@@ -11,7 +11,7 @@ public class AES256Util {
     private static final String SECURITY_KEY = "kyoboplatformbiz";
     private static final String iv = SECURITY_KEY.substring(0, 16); // 16byte
 
-    public static String encrypt(String text) throws Exception {
+    public String encrypt(String text) throws Exception {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         SecretKeySpec keySpec = new SecretKeySpec(SECURITY_KEY.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
@@ -21,7 +21,7 @@ public class AES256Util {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
-    public static String decrypt(String cipherText) throws Exception {
+    public String decrypt(String cipherText) throws Exception {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         SecretKeySpec keySpec = new SecretKeySpec(SECURITY_KEY.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());

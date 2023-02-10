@@ -61,11 +61,11 @@ public class ParentAccountDetailsResponse {
                 .email(new MarkingUtil().emailMasking(parent.getEmail()))
                 .babies(babyDtosFromEntity)
                 .id(new MarkingUtil().idMasking(account.getId()))
-                .name(new MarkingUtil().nameMasking(AES256Util.decrypt(account.getName())))
+                .name(new MarkingUtil().nameMasking(new AES256Util().decrypt(account.getName())))
                 .gender(account.getGender())
                 .birthDay(account.getBirthDay())
                 .createdAt(account.getCreatedAt())
-                .phoneNumber(new MarkingUtil().phoneMasking(AES256Util.decrypt(account.getPhoneNumber())))
+                .phoneNumber(new MarkingUtil().phoneMasking(new AES256Util().decrypt(account.getPhoneNumber())))
                 .lastSignInAt(account.getLastSignInAt())
                 .socialAccounts(socialAccountDtosFromEntity)
                 .build();
