@@ -95,15 +95,15 @@ public class MarkingUtil {
         return birthday;
     }
 
-    public static String idMasking(String id) {
+    public String idMasking(String id) {
         return koreanEnglishNumberSignMasking(id, 4);
     }
 
-    public static String nicknameMasking(String nickname) {
+    public String nicknameMasking(String nickname) {
         return koreanEnglishNumberSignMasking(nickname, 4);
     }
 
-    private static String koreanEnglishNumberSignMasking(String stringToMask, int numOfMiddleLettersToMask){
+    private String koreanEnglishNumberSignMasking(String stringToMask, int numOfMiddleLettersToMask){
         String regex = "(^[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣0-9\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"]+)$";
 
         Matcher matcher = Pattern.compile(regex).matcher(stringToMask);
