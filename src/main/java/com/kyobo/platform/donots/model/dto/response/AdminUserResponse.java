@@ -70,7 +70,7 @@ public class AdminUserResponse {
     private LocalDateTime createdDate;
 
     public AdminUserResponse(AdminUser adminUser)  {
-        this.adminId = adminUser.getAdminId();
+        this.adminId = markingUtil.idMasking(adminUser.getAdminId());
         this.adminUserName = markingUtil.nameMasking(adminUser.getAdminUserName());
         this.adminUserNumber = adminUser.getAdminUserNumber();
         this.id = adminUser.getId();

@@ -27,6 +27,7 @@ public class ParentAccountResponse {
 
     @QueryProjection
     public ParentAccountResponse(ParentType type, ParentGrade grade, String nickname, String id, LocalDateTime createdAt, String phoneNumber, String email, LocalDateTime lastSignInAt, Long key) throws Exception {
+        AES256Util aes256Util = new AES256Util();
         this.type = type;
         this.grade = grade;
         if (StringUtils.hasText(nickname))
@@ -36,7 +37,7 @@ public class ParentAccountResponse {
             this.id = new MarkingUtil().idMasking(id);
 
         this.createdAt = createdAt;
-        this.phoneNumber = new MarkingUtil().phoneMasking(AES256Util.decrypt(phoneNumber));
+        this.phoneNumber = new MarkingUtil().phoneMasking(aes256Util.decrypt(phoneNumber));
         this.email = new MarkingUtil().emailMasking(email);
         this.lastSignInAt = lastSignInAt;
         this.key = key;
