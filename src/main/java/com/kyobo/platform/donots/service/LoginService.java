@@ -133,15 +133,15 @@ public class LoginService implements UserDetailsService {
         AdminUser adminUser = adminUserRepository.findById(id).orElseThrow(()-> new AdminUserNotFoundException());
         return new AdminUserResponse(adminUser);
     }
-    public AdminUserListResponse getAdminUserAll(String search, Pageable pageable, String type) {
+    public AdminUserListResponse getAdminUserAll(String search, Pageable pageable, AdminUserSearchType type) {
         Page<AdminUser> pageAdminUser;
-        if (type.equals("ADMIN_ID")) {
+        if (type.equals(AdminUserSearchType.ADMIN_ID)) {
             pageAdminUser = adminUserRepository.findByAdminIdContaining(search, pageable);
-        } else if(type.equals("ADMIN_ROLE")){
+        } else if(type.equals(AdminUserSearchType.ADMIN_ROLE)){
             pageAdminUser = adminUserRepository.findByRole(search, pageable);
-        } else if(type.equals("ADMIN_USER_NAME")) {
-            pageAdminUser = adminUserRepository.findByAdminUserNameContaining(search, pageable);
-        } else if(type.equals("ALL")) {
+        } else if(type.equals(AdminUserSearchType.REGEDIT_ADMIN_ID)) {
+            pageAdminUser = adminUserRepository.findByRegeditAdminIdContaining(search, pageable);
+        } else if(type.equals(AdminUserSearchType.ALL)) {
             pageAdminUser = adminUserRepository.findAll(pageable);
         } else {
             pageAdminUser = adminUserRepository.findAll(pageable);
