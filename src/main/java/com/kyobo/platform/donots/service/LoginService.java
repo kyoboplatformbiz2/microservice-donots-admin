@@ -38,6 +38,8 @@ public class LoginService implements UserDetailsService {
     private final HttpSession httpSession;
 
     public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
+        AdminUser myAdminUser = (AdminUser) httpSession.getAttribute("adminUser");
+
         AdminUser adminUser = adminUserRepository.findByAdminId(createAdminUserRequest.getAdminId());
 
         if(adminUser != null)
@@ -51,7 +53,7 @@ public class LoginService implements UserDetailsService {
                 .adminUserNumber(createAdminUserRequest.getAdminUserNumber())
                 .departmentName(createAdminUserRequest.getDepartmentName())
                 .phoneNumber(createAdminUserRequest.getPhoneNumber())
-                .regeditAdminId(createAdminUserRequest.getRegeditAdminId())
+                .regeditAdminId(myAdminUser.getAdminId())
                 .email(createAdminUserRequest.getEmail())
                 .reasonsForAuthorization(createAdminUserRequest.getReasonsForAuthorization())
                 .role(createAdminUserRequest.getRole())
@@ -117,8 +119,7 @@ public class LoginService implements UserDetailsService {
             throw new PasswordNotMatchException();
         adminUser.increaseCount(adminUser.getLoginCount());
         adminUser.updateSessionId(adminUser.getSessionId());
-        httpSession.setAttribute(adminUser.getAdminId(), "");
-
+        httpSession.setAttribute("adminUser", adminUser);
 
         return new AdminUserResponse(adminUser);
     }
