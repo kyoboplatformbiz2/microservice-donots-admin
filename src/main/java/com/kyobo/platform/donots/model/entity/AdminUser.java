@@ -65,6 +65,9 @@ public class AdminUser implements UserDetails {
     @Column(name = "LAST_PASSWORD_CHANGE_DATE")
     private LocalDateTime lastPasswordChangeDate;
 
+    @Column(name = "LOGIN_COUNT")
+    private Long loginCount;
+
     @Column(name = "REASONS_FOR_AUTHORIZATION")
     private String reasonsForAuthorization;
 
@@ -142,6 +145,10 @@ public class AdminUser implements UserDetails {
 
     public void updateLastPasswordChangeDate() {
         this.lastPasswordChangeDate = LocalDateTime.now();
+    }
+
+    public void increaseCount(Long loginCount) {
+        this.loginCount = loginCount + 1;
     }
 }
 

@@ -57,6 +57,7 @@ public class LoginService implements UserDetailsService {
                 .role(createAdminUserRequest.getRole())
                 .attachImageUrl(createAdminUserRequest.getAttachImageUrl())
                 .memo(createAdminUserRequest.getMemo())
+                .loginCount(0l)
                 .lastPasswordChangeDate(now)
                 .createdDate(now)
                 .lastSignInDate(now)
@@ -107,13 +108,14 @@ public class LoginService implements UserDetailsService {
     }
 
 
+    @Transactional
     public AdminUserResponse signIn(SignInRequest signInRequest) {
         AdminUser adminUser = adminUserRepository.findByAdminId(signInRequest.getAdminId());
         if(adminUser == null)
             throw new AdminUserNotFoundException();
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-
+        adminUser.increaseCount(adminUser.getLoginCount());
         adminUser.updateSessionId(adminUser.getSessionId());
         httpSession.setAttribute(adminUser.getAdminId(), "");
 

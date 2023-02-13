@@ -70,7 +70,7 @@ public class AdminUserResponse {
 
     public AdminUserResponse(AdminUser adminUser)  {
         MarkingUtil markingUtil = new MarkingUtil();
-        this.adminId = markingUtil.idMasking(adminUser.getAdminId());
+        this.adminId = adminUser.getAdminId();
         this.adminUserName = markingUtil.nameMasking(adminUser.getAdminUserName());
         this.adminUserNumber = adminUser.getAdminUserNumber();
         this.id = adminUser.getId();
@@ -87,7 +87,9 @@ public class AdminUserResponse {
         this.createdDate = adminUser.getCreatedDate();
         this.headerInfo = adminUser.getSessionId();
 
-        if (adminUser.getLastPasswordChangeDate().plusMonths(3).isBefore(LocalDateTime.now()))
+        if(adminUser.getLoginCount()==0)
+            this.isPasswordChangeFlag = true;
+        else if (adminUser.getLastPasswordChangeDate().plusMonths(3).isBefore(LocalDateTime.now()))
             this.isPasswordChangeFlag = true;
         else
             this.isPasswordChangeFlag = false;
