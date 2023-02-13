@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.controller;
 
+import com.kyobo.platform.donots.model.dto.request.AdminUserSearchType;
 import com.kyobo.platform.donots.model.dto.request.CreateAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.request.ModifyAdminUserRequest;
 import com.kyobo.platform.donots.model.dto.response.AdminUserListResponse;
@@ -84,7 +85,7 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity getAdminUserList(@RequestParam(required = false) final String search, final String type, final Pageable pageable) {
+    public ResponseEntity getAdminUserList(@RequestParam(required = false) final String search, final AdminUserSearchType type, final Pageable pageable) {
         AdminUserListResponse response = loginService.getAdminUserAll(search, pageable, type);
         return new ResponseEntity(response, HttpStatus.OK);
     }

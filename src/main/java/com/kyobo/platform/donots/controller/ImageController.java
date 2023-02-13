@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +50,4 @@ public class ImageController {
         result.put("attachImageUrl", attachImageUrl);
         return new ResponseEntity(result, HttpStatus.CREATED);
     }
-
-
 }

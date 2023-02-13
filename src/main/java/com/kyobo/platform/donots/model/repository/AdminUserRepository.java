@@ -13,5 +13,5 @@ public interface AdminUserRepository extends JpaRepository<AdminUser, Long> {
     boolean existsByAdminId(String adminId);
     Page<AdminUser> findByAdminIdContaining(String search, Pageable pageable);
     Page<AdminUser> findByRole(String search, Pageable pageable);
-    Page<AdminUser> findByAdminUserNameContaining(String search, Pageable pageable);
+    Page<AdminUser> findByRegeditAdminIdContaining(String search, Pageable pageable);
 }

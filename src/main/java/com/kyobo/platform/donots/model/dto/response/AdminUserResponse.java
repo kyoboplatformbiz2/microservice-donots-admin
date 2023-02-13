@@ -14,7 +14,6 @@ public class AdminUserResponse {
     public AdminUserResponse(){
     }
 
-    MarkingUtil markingUtil = new MarkingUtil();
     @Schema(description = "어드민 고유 번호")
     private Long id;
 
@@ -70,6 +69,7 @@ public class AdminUserResponse {
     private LocalDateTime createdDate;
 
     public AdminUserResponse(AdminUser adminUser)  {
+        MarkingUtil markingUtil = new MarkingUtil();
         this.adminId = markingUtil.idMasking(adminUser.getAdminId());
         this.adminUserName = markingUtil.nameMasking(adminUser.getAdminUserName());
         this.adminUserNumber = adminUser.getAdminUserNumber();
@@ -83,7 +83,7 @@ public class AdminUserResponse {
         this.phoneNumber = markingUtil.phoneMasking(adminUser.getPhoneNumber());
         this.reasonsForAuthorization = adminUser.getReasonsForAuthorization();
         this.role = adminUser.getRole();
-        this.regeditAdminId = adminUser.getRegeditAdminId();
+        this.regeditAdminId = markingUtil.idMasking(adminUser.getRegeditAdminId());
         this.createdDate = adminUser.getCreatedDate();
         this.headerInfo = adminUser.getSessionId();
 
