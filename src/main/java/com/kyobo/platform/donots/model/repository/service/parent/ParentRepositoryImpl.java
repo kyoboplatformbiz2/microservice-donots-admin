@@ -1,10 +1,11 @@
 package com.kyobo.platform.donots.model.repository.service.parent;
 
+import com.kyobo.platform.donots.common.exception.DefaultException;
 import com.kyobo.platform.donots.model.dto.response.ParentAccountResponse;
 import com.kyobo.platform.donots.model.dto.response.QParentAccountResponse;
 import com.kyobo.platform.donots.model.entity.service.parent.ParentGrade;
 import com.kyobo.platform.donots.model.entity.service.parent.ParentType;
-import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchCondition;
+import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchConditionAndTerm;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -32,14 +33,25 @@ public class ParentRepositoryImpl implements ParentRepositoryCustom {
     }
 
     @Override
-    public Page<ParentAccountResponse> search(ParentAccountSearchCondition condition, Pageable pageable) {
+    public Page<ParentAccountResponse> search(ParentAccountSearchConditionAndTerm searchConditionAndTerm, Pageable pageable) {
 
         // TODO 추후 PageRequest 사용하도록 개선
-        OrderSpecifier<LocalDateTime> orderSpecifier;
-        switch (condition.getOrderingCriterion()) {
+        if (searchConditionAndTerm.getSearchCondition() == null)
+            throw new DefaultException("검색조건이 null입니다");
+
+        BooleanExpression booleanExpressionOfSelectedSearchConditionAndTerm = null;
+        switch (searchConditionAndTerm.getSearchCondition()) {
+            case NICKNAME -> booleanExpressionOfSelectedSearchConditionAndTerm = nicknameLike(searchConditionAndTerm.getSearchTerm());
+            case ID -> booleanExpressionOfSelectedSearchConditionAndTerm = idLike(searchConditionAndTerm.getSearchTerm());
+            case PHONE_NUMBER -> booleanExpressionOfSelectedSearchConditionAndTerm = phoneNumberLike(searchConditionAndTerm.getSearchTerm());
+            case EMAIL -> booleanExpressionOfSelectedSearchConditionAndTerm = emailLike(searchConditionAndTerm.getSearchTerm());
+            case MEMBER_KEY -> booleanExpressionOfSelectedSearchConditionAndTerm = keyEq(Long.parseLong(searchConditionAndTerm.getSearchTerm()));
+        }
+
+        OrderSpecifier<LocalDateTime> orderSpecifier = account.createdAt.desc();
+        switch (searchConditionAndTerm.getOrderingCriterion()) {
             case CREATED_AT_DESC -> orderSpecifier = account.createdAt.desc();
             case LAST_LOGIN_AT_DESC -> orderSpecifier = account.lastSignInAt.desc();
-            default -> orderSpecifier = account.createdAt.desc();
         }
 
         QueryResults<ParentAccountResponse> results = queryFactory
@@ -57,14 +69,10 @@ public class ParentRepositoryImpl implements ParentRepositoryCustom {
                 .from(parent)
                 .leftJoin(account).on(parent.accountKey.eq(account.accountKey))
                 .where(
-                        joinDateBetween(condition.getJoinDateFrom(), condition.getJoinDateTo()),
-                        typeEq(condition.getType()),
-                        gradeEq(condition.getGrade()),
-                        nicknameLike(condition.getNickname()),
-                        idLike(condition.getId()),
-                        phoneNumberLike(condition.getPhoneNumber()),
-                        emailLike(condition.getEmail()),
-                        keyEq(condition.getKey())
+                        joinDateBetween(searchConditionAndTerm.getJoinDateFrom(), searchConditionAndTerm.getJoinDateTo()),
+                        typeEq(searchConditionAndTerm.getType()),
+                        gradeEq(searchConditionAndTerm.getGrade()),
+                        booleanExpressionOfSelectedSearchConditionAndTerm
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

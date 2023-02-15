@@ -4,7 +4,7 @@ import com.kyobo.platform.donots.common.exception.RequestBodyEmptyException;
 import com.kyobo.platform.donots.model.dto.response.ParentAccountDetailsResponse;
 import com.kyobo.platform.donots.model.dto.response.ParentAccountResponse;
 import com.kyobo.platform.donots.model.entity.service.parent.ParentType;
-import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchCondition;
+import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchConditionAndTerm;
 import com.kyobo.platform.donots.service.MemberManagementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,14 +34,14 @@ public class MemberManagementController {
     // Parameter로 받을 때 400 Bad Request 발생하는 것을 확인한 형태:
     // @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime someDateTime
     // @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime someDateTime
-    public ResponseEntity<?> findAllMembersWithAccount(ParentAccountSearchCondition condition, String joinFrom, String joinTo, Pageable pageable) {
+    public ResponseEntity<?> findAllMembersWithAccount(ParentAccountSearchConditionAndTerm searchConditionAndTerm, String joinFrom, String joinTo, Pageable pageable) {
         log.info("MemberManagementController.findAllMembersWithAccount");
         log.info("joinFrom: "+ joinFrom);
         log.info("joinTo: "+ joinTo);
-        condition.setJoinDateFrom(LocalDate.parse(joinFrom).atStartOfDay());
-        condition.setJoinDateTo(LocalDate.parse(joinTo).atStartOfDay());
+        searchConditionAndTerm.setJoinDateFrom(LocalDate.parse(joinFrom).atStartOfDay());
+        searchConditionAndTerm.setJoinDateTo(LocalDate.parse(joinTo).atStartOfDay());
 
-        Page<ParentAccountResponse> parentWithAccountResponses = memberManagementService.findAllMembersWithAccount(condition, pageable);
+        Page<ParentAccountResponse> parentWithAccountResponses = memberManagementService.findAllMembersWithAccount(searchConditionAndTerm, pageable);
 
         return ResponseEntity.ok(parentWithAccountResponses);
     }

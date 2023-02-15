@@ -7,7 +7,7 @@ import com.kyobo.platform.donots.model.entity.service.account.Account;
 import com.kyobo.platform.donots.model.entity.service.account.SocialAccount;
 import com.kyobo.platform.donots.model.entity.service.parent.Parent;
 import com.kyobo.platform.donots.model.entity.service.parent.ParentType;
-import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchCondition;
+import com.kyobo.platform.donots.model.repository.searchcondition.ParentAccountSearchConditionAndTerm;
 import com.kyobo.platform.donots.model.repository.service.account.AccountRepository;
 import com.kyobo.platform.donots.model.repository.service.account.SocialAccountRepository;
 import com.kyobo.platform.donots.model.repository.service.parent.ParentRepository;
@@ -28,21 +28,16 @@ public class MemberManagementService {
     private final AccountRepository accountRepository;
     private final SocialAccountRepository socialAccountRepository;
 
-    private final EntityManager em;
-    private final JPAQueryFactory queryFactory;
-
-    public MemberManagementService(ParentRepository parentRepository, AccountRepository accountRepository, SocialAccountRepository socialAccountRepository, EntityManager em) {
+    public MemberManagementService(ParentRepository parentRepository, AccountRepository accountRepository, SocialAccountRepository socialAccountRepository) {
         this.parentRepository = parentRepository;
         this.accountRepository = accountRepository;
         this.socialAccountRepository = socialAccountRepository;
-        this.em = em;
-        this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Transactional
-    public Page<ParentAccountResponse> findAllMembersWithAccount(ParentAccountSearchCondition condition, Pageable pageable) {
+    public Page<ParentAccountResponse> findAllMembersWithAccount(ParentAccountSearchConditionAndTerm searchConditionAndTerm, Pageable pageable) {
 
-        Page<ParentAccountResponse> parentWithAccountResponses = parentRepository.search(condition, pageable);
+        Page<ParentAccountResponse> parentWithAccountResponses = parentRepository.search(searchConditionAndTerm, pageable);
         log.info("parentWithAccountResponses: "+ parentWithAccountResponses);
         for (ParentAccountResponse parentAccountResponse : parentWithAccountResponses) {
             log.info(parentAccountResponse.toString());
