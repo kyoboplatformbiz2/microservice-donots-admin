@@ -1,5 +1,7 @@
 package com.kyobo.platform.donots.model.entity;
 
+import com.kyobo.platform.donots.model.dto.request.QnAUpdateRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,8 +47,9 @@ public class QnA {
     @Column(name = "QNA_CATEGORY")
     private QnACategory qnACategory;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private Status status;
 
     @Column(name = "OPEN_DATE", nullable = false)
     private LocalDateTime openDate;
@@ -54,11 +57,11 @@ public class QnA {
     @Column(name = "CLOSE_DATE")
     private LocalDateTime closeDate;
 
-    public void updateQnA(QnACategory qnACategory, String answer) {
-        this.qnACategory = qnACategory;
-        this.answer = answer;
-        this.status = "F";
-        this.adminId = "MockUser";
+    public void updateQnA(QnAUpdateRequest qnAUpdateRequest, String adminId) {
+        this.qnACategory = qnAUpdateRequest.getQnACategory();
+        this.answer = qnAUpdateRequest.getAnswer();
+        this.status = qnAUpdateRequest.getStatus();
+        this.adminId = adminId;
         this.closeDate = LocalDateTime.now();
     }
 }

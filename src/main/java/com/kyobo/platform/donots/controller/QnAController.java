@@ -1,6 +1,7 @@
 package com.kyobo.platform.donots.controller;
 
 
+import com.kyobo.platform.donots.model.dto.request.QnAListRequest;
 import com.kyobo.platform.donots.model.dto.request.QnAUpdateRequest;
 import com.kyobo.platform.donots.model.dto.response.QnAListResponse;
 import com.kyobo.platform.donots.service.QnAService;
@@ -44,10 +45,8 @@ public class QnAController {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = QnAListResponse.class)))
     })
-    public ResponseEntity<?> getQnAList(@RequestParam(required = false) final String search,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDateTime start,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDateTime end, final Pageable pageable)  {
-        QnAListResponse qnAListResponse = qnAService.getQnAList(search, start, end, pageable);
+    public ResponseEntity<?> getQnAList(@ModelAttribute QnAListRequest qnAListRequest, Pageable pageable)  {
+        QnAListResponse qnAListResponse = qnAService.getQnAList(qnAListRequest, pageable);
         return new ResponseEntity(qnAListResponse, HttpStatus.OK);
     }
 }
