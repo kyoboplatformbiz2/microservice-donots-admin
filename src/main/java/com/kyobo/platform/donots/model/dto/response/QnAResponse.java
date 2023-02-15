@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kyobo.platform.donots.model.entity.QnA;
 import com.kyobo.platform.donots.model.entity.QnACategory;
 
+import com.kyobo.platform.donots.model.entity.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
@@ -48,7 +50,14 @@ public class QnAResponse {
     private String email;
 
     @Schema(description = "상태")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Schema(description = "관리자")
+    private String adminId;
+
+    @Schema(description = "등록자 ID")
+    private Long regeditId;
 
     public QnAResponse(QnA qna){
         this.qnACategory = qna.getQnACategory();
@@ -61,5 +70,7 @@ public class QnAResponse {
         this.openDate = qna.getOpenDate();
         this.status = qna.getStatus();
         this.imageUrl = qna.getImageUrl();
+        this.adminId = qna.getAdminId();
+        this.regeditId = qna.getRegeditId();
     }
 }

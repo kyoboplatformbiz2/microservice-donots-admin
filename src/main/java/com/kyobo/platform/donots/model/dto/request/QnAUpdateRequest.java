@@ -1,6 +1,7 @@
 package com.kyobo.platform.donots.model.dto.request;
 
 import com.kyobo.platform.donots.model.entity.QnACategory;
+import com.kyobo.platform.donots.model.entity.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -17,8 +18,11 @@ public class QnAUpdateRequest {
 
     @Enumerated(EnumType.STRING)
     @Schema(description = "카테고리")
-    @NotNull
     private QnACategory qnACategory;
+
+    @Enumerated(EnumType.STRING)
+    @Schema(description = "상태")
+    private Status status;
 
     @Schema(description = "답변")
     @NotNull
