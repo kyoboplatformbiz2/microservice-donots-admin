@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}')
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -44,17 +44,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    //implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'org.projectlombok:lombok'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
     implementation 'com.vladmihalcea:hibernate-types-55:2.21.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     // QueryDSL 시작
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
-    implementation 'com.querydsl:querydsl-jpa:${queryDslVersion}'
+    // (홑따옴표를 사용하면 컴파일 오류가 발생하여 쌍따옴표로 원복함)
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     // QueryDSL 끝
-
 
     implementation 'com.amazonaws:aws-java-sdk:1.12.334'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.281'
@@ -64,15 +64,15 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.projectlombok:lombok'
-    // QueryDSL
-    annotationProcessor 'com.querydsl:querydsl-apt:${queryDslVersion}'
+    // QueryDSL (홑따옴표를 사용하면 컴파일 오류가 발생하여 쌍따옴표로 원복함)
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
 // QueryDSL 시작
-def querydslDir = '$buildDir/generated/querydsl'
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true
