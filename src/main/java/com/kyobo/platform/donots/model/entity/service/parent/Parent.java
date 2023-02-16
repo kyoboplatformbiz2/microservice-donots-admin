@@ -1,6 +1,5 @@
 package com.kyobo.platform.donots.model.entity.service.parent;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +37,9 @@ public class Parent {
     private ParentGrade grade;
 //    @Transient private ActivityIndicator activityIndicator;
 
+    // Internet Explorer에서 입력 가능한 최대 URL 길이. (GET Method 사용)
+    // 다른 브라우저는 이것보다 더 길기 때문에 가장 짧은 Internet Explorer를 기준으로 했다.
+    @Column(length = 2048)
     private String nickname;
     private String email;
     private String profilePictureUrl;
@@ -71,6 +73,15 @@ public class Parent {
     // 설정 > Push 설정 > 작성 콘텐츠 등록/검수 결과
     @JsonProperty("isPostCensorshipResultPushNotifSet")
     private Boolean isPostCensorshipResultPushNotifSet;
+
+    // 회원등급 산정과 오늘의 회원을 위한 활동지표
+    @Builder.Default private Integer pageviewedCount = 0;                       // 조회된수
+    @Builder.Default private Integer recipePostingCount = 0;                    // 레시피게시수
+    @Builder.Default private Integer scrapbookedCount = 0;                      // 스크랩된수
+    @Builder.Default private Integer reactionAddingCount = 0;                   // 반응한수
+    @Builder.Default private Integer scrapbookingCount = 0;                     // 스크랩한수
+    @Builder.Default private Integer todaysMemberRanking = Integer.MAX_VALUE;   // 오늘의 회원 순위
+    private LocalDateTime lastActivityIndicatorAggregatedDatetime;              // 마지막 활동지표 집계시각
 
     // 마케팅 동의 및 알림방식 => 계정영역에서 처리함
 //    @Enumerated(EnumType.STRING)

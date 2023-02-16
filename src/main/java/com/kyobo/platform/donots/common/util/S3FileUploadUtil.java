@@ -2,6 +2,7 @@ package com.kyobo.platform.donots.common.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.kyobo.platform.donots.common.exception.BusinessException;
 import com.kyobo.platform.donots.config.AWSConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.DecoderException;
@@ -25,15 +26,26 @@ import java.util.Properties;
 @Component
 public class S3FileUploadUtil {
 
-    // TODO 임시
+    // FIXME 프로퍼티 읽어오도록
 //    @Value("${spring.profiles.active}")
-    private String env_active = "dev";
+    private String env_active;
 
-    // TODO 임시
 //    @Value("${cloud.aws.region.static}")
-    private String region = "ap-northeast-2";
+    private String region;
+    private String backendImageBucket;
+    private String distributionDomain;
 
     private AWSConfig awsConfig = new AWSConfig();
+    private AmazonS3 amazonS3;
+
+    private void loadAndSetAwsAccessInfo() throws IOException {
+        // TODO 임시 하드코딩
+        env_active = "dev";
+        region = "ap-northeast-2";
+        backendImageBucket = loadProperty().getProperty("backendImageBucket");
+        distributionDomain = loadProperty().getProperty("distributionDomain");
+        amazonS3 = awsConfig.amazonS3(region, env_active);
+    }
 
     public Properties loadProperty() throws IOException {
         Properties properties = new Properties();
@@ -45,14 +57,17 @@ public class S3FileUploadUtil {
     }
 
     public String uploadImageToS3AndGetUrl(MultipartFile multipartFile, String asIsImageUrl, String imageDirectoryPathAfterDomain) throws IOException, DecoderException {
-        String backendImageBucket = loadProperty().getProperty("backendImageBucket");
-        String distributionDomain = loadProperty().getProperty("distributionDomain");
+        loadAndSetAwsAccessInfo();
 
         String toBeImageFileName = multipartFile.getOriginalFilename();
+        if (!isUrlLengthAvailable(
+                buildFullUrlWithEncodedFileName(distributionDomain, imageDirectoryPathAfterDomain, toBeImageFileName))
+        ) {
+            throw new BusinessException("업로드 하려는 파일명이 너무 깁니다");
+        }
+
         String[] dotSplittedImageFileName = toBeImageFileName.split("\\.");
         String fileExt = dotSplittedImageFileName[dotSplittedImageFileName.length - 1];
-
-        AmazonS3 amazonS3 = awsConfig.amazonS3(region, env_active);
 
         if (!StringUtils.isBlank(asIsImageUrl)) {
             String[] slashSplittedAsIsImageUrl = asIsImageUrl.split("/");
@@ -76,10 +91,7 @@ public class S3FileUploadUtil {
     }
 
     public void deleteImageFromS3(String asIsImageUrl, String imageDirectoryPathAfterDomain) throws IOException, DecoderException {
-        //cloudfront 사용을 위한 인증 properties 파일 로드
-        String backendImageBucket = loadProperty().getProperty("backendImageBucket");
-
-        AmazonS3 amazonS3 = awsConfig.amazonS3(region, env_active);
+        loadAndSetAwsAccessInfo();
 
         // TODO 삭제 오류시 익셉션 정의
         // 최초 등록이 아닐 경우 기존 이미지를 삭제한다.
@@ -93,6 +105,23 @@ public class S3FileUploadUtil {
             String decodedAsIsImageFileName = uc.decode(asIsImageFileName, "UTF-8");
             amazonS3.deleteObject(backendImageBucket, imageDirectoryPathAfterDomain + decodedAsIsImageFileName);
         }
+    }
+
+    public static boolean isUrlLengthAvailable(String fullUrl) {
+
+        // Internet Explorer에서 입력 가능한 최대 URL 길이. (GET Method 사용)
+        // 다른 브라우저는 이것보다 더 길기 때문에 가장 짧은 Internet Explorer를 기준으로 했다.
+        final int MAX_URL_LENGTH_INTERNET_EXPLORER = 2048;
+        if (fullUrl.length() <= MAX_URL_LENGTH_INTERNET_EXPLORER)
+            return true;
+        else
+            return false;
+    }
+
+    public static String buildFullUrlWithEncodedFileName(String domain, String fileDirectoryPathAfterDomain, String fileName) throws UnsupportedEncodingException {
+        URLCodec uc = new URLCodec();
+        String encodedFileName = uc.encode(fileName, "UTF-8");
+        return "https://" + domain + "/" + fileDirectoryPathAfterDomain + encodedFileName;
     }
 
     private static File compressImageFile(MultipartFile multipartFile, String imageFileName, String fileExt) throws IOException {
@@ -111,12 +140,5 @@ public class S3FileUploadUtil {
         ios.close();
         writer.dispose();
         return imageFile;
-    }
-
-    private static String buildFullUrlWithEncodedFileName(String distributionDomain, String parentProfilePicturePrefix, String toBeProfilePictureFileName) throws UnsupportedEncodingException {
-        URLCodec uc = new URLCodec();
-        String encodedToBeFileName = uc.encode(toBeProfilePictureFileName, "UTF-8");
-        String encodedToBeProfilePictureUrl = "https://" + distributionDomain + "/" + parentProfilePicturePrefix + encodedToBeFileName;
-        return encodedToBeProfilePictureUrl;
     }
 }
