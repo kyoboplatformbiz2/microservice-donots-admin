@@ -45,6 +45,9 @@ public class ParentAccountDetailsResponse {
     private List<SocialAccountForMemberDetailsDto> socialAccounts = new ArrayList<>();
 
     public static ParentAccountDetailsResponse from(Parent parent, Account account, List<SocialAccount> socialAccounts) throws Exception {
+        MarkingUtil markingUtil = new MarkingUtil();
+        AES256Util aes256Util = new AES256Util();
+
         List<BabyDto> babyDtosFromEntity = new ArrayList<>();
         for (Baby baby : parent.getBabies())
             babyDtosFromEntity.add(BabyDto.from(baby));
@@ -52,20 +55,20 @@ public class ParentAccountDetailsResponse {
         List<SocialAccountForMemberDetailsDto> socialAccountDtosFromEntity = new ArrayList<>();
         for (int i = 0; i < socialAccounts.size(); i++) {
             socialAccountDtosFromEntity.add(SocialAccountForMemberDetailsDto.from(socialAccounts.get(i)));
-            socialAccountDtosFromEntity.get(i).setEmail(new MarkingUtil().emailMasking(socialAccountDtosFromEntity.get(i).getEmail()));
+            socialAccountDtosFromEntity.get(i).setEmail(markingUtil.emailUsername4LettersMasking(socialAccountDtosFromEntity.get(i).getEmail()));
         }
 
         return ParentAccountDetailsResponse.builder()
                 .type(parent.getType())
-                .nickname(new MarkingUtil().nicknameMasking(parent.getNickname()))
-                .email(new MarkingUtil().emailMasking(parent.getEmail()))
+                .nickname(parent.getNickname())
+                .email(markingUtil.emailUsername4LettersMasking(parent.getEmail()))
                 .babies(babyDtosFromEntity)
-                .id(new MarkingUtil().idMasking(account.getId()))
-                .name(new MarkingUtil().nameMasking(new AES256Util().decrypt(account.getName())))
+                .id(account.getId())
+                .name(markingUtil.nameMasking(aes256Util.decrypt(account.getName())))
                 .gender(account.getGender())
                 .birthDay(account.getBirthDay())
                 .createdAt(account.getCreatedAt())
-                .phoneNumber(new MarkingUtil().phoneMasking(new AES256Util().decrypt(account.getPhoneNumber())))
+                .phoneNumber(markingUtil.phoneMasking(aes256Util.decrypt(account.getPhoneNumber())))
                 .lastSignInAt(account.getLastSignInAt())
                 .socialAccounts(socialAccountDtosFromEntity)
                 .build();

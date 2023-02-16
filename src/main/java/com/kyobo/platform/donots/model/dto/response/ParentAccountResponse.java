@@ -27,18 +27,20 @@ public class ParentAccountResponse {
 
     @QueryProjection
     public ParentAccountResponse(ParentType type, ParentGrade grade, String nickname, String id, LocalDateTime createdAt, String phoneNumber, String email, LocalDateTime lastSignInAt, Long key) throws Exception {
+        MarkingUtil markingUtil = new MarkingUtil();
         AES256Util aes256Util = new AES256Util();
+
         this.type = type;
         this.grade = grade;
         if (StringUtils.hasText(nickname))
-            this.nickname = new MarkingUtil().nicknameMasking(nickname);
+            this.nickname = markingUtil.nicknameMasking(nickname);
 
         if (StringUtils.hasText(id))
-            this.id = new MarkingUtil().idMasking(id);
+            this.id = id;
 
         this.createdAt = createdAt;
-        this.phoneNumber = new MarkingUtil().phoneMasking(aes256Util.decrypt(phoneNumber));
-        this.email = new MarkingUtil().emailMasking(email);
+        this.phoneNumber = markingUtil.phoneMasking(aes256Util.decrypt(phoneNumber));
+        this.email = markingUtil.emailUsername4LettersMasking(email);
         this.lastSignInAt = lastSignInAt;
         this.key = key;
     }

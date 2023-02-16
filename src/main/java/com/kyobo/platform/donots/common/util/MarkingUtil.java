@@ -103,6 +103,15 @@ public class MarkingUtil {
         return koreanEnglishNumberSignMasking(nickname, 4);
     }
 
+    public String emailUsername4LettersMasking(String email) {
+        String[] splittedEmail = email.split("@");
+
+        String maskedEmailUsername = koreanEnglishNumberSignMasking(splittedEmail[0], 4);
+        String maskedEmail = maskedEmailUsername + "@" + splittedEmail[1];
+
+        return maskedEmail;
+    }
+
     private String koreanEnglishNumberSignMasking(String stringToMask, int numOfMiddleLettersToMask){
         String regex = "(^[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣0-9\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"]+)$";
 

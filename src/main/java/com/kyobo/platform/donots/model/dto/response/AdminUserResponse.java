@@ -77,7 +77,7 @@ public class AdminUserResponse {
         this.lastPasswordChangeDate = adminUser.getLastPasswordChangeDate();
         this.attachImageUrl = adminUser.getAttachImageUrl();
         this.departmentName = adminUser.getDepartmentName();
-        this.email = markingUtil.emailMasking(adminUser.getEmail());
+        this.email = markingUtil.emailUsername4LettersMasking(adminUser.getEmail());
         this.lastSignInDate = adminUser.getLastSignInDate();
         this.memo = adminUser.getMemo();
         this.phoneNumber = markingUtil.phoneMasking(adminUser.getPhoneNumber());
