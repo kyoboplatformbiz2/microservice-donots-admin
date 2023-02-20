@@ -42,9 +42,12 @@ public class FaqPost {
         this.faqCategory = faqPostRequest.getFaqCategory();
         this.question = faqPostRequest.getQuestion();
         this.answer = faqPostRequest.getAnswer();
-        this.representativeImgUrl = faqPostRequest.getRepresentativeImgUrl();
         this.boardStartDatetime = faqPostRequest.getBoardStartDatetime();
         this.boardEndDatetime = faqPostRequest.getBoardEndDatetime();
         this.lastModifiedDatetime = LocalDateTime.now();
+    }
+
+    public void updateRepresentativeImgUrl(String representativeImgUrl) {
+        this.representativeImgUrl = representativeImgUrl;
     }
 }

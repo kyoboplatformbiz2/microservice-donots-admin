@@ -12,13 +12,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -54,16 +57,18 @@ public class FaqPostController {
     }
 
     @PostMapping("/v1/faq-posts")
-    @Operation(summary = "FAQ 등록 ", description = "")
+    @Operation(summary = "FAQ 등록", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public ResponseEntity<?> registerFaqPost(@RequestBody @Valid FaqPostRequest faqPostRequest) {
-        Long registeredFaqPost = faqPostService.registerFaqPost(faqPostRequest);
+    public ResponseEntity<?> registerFaqPost(@Valid FaqPostRequest faqPostRequest, MultipartFile multipartFile) throws DecoderException, IOException {
+
+        Long registeredFaqPost = faqPostService.registerFaqPost(faqPostRequest, multipartFile);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{key}")
                 .buildAndExpand(registeredFaqPost)
                 .toUri();
+
         return ResponseEntity.created(location).build();
     }
 
@@ -72,8 +77,8 @@ public class FaqPostController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public ResponseEntity<?> modifyFaqPost(@PathVariable Long key, @RequestBody @Valid FaqPostRequest faqPostRequest) {
-        faqPostService.modifyFaqPost(key, faqPostRequest);
+    public ResponseEntity<?> modifyFaqPost(@PathVariable Long key, @Valid FaqPostRequest faqPostRequest, MultipartFile multipartFile) throws DecoderException, IOException {
+        faqPostService.modifyFaqPost(key, faqPostRequest, multipartFile);
         return ResponseEntity.ok().build();
     }
 
