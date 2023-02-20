@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
-    public ResponseEntity noticeRegedit(NoticeRequest noticeRequest, MultipartFile multipartFile) throws IOException, DecoderException {
+    public ResponseEntity noticeRegedit(@Valid NoticeRequest noticeRequest, MultipartFile multipartFile) throws IOException, DecoderException {
 
         Long result = noticeService.noticeRegedit(noticeRequest, multipartFile);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
