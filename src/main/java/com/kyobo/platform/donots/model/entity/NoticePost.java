@@ -49,14 +49,16 @@ public class NoticePost {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime boardEndDate;
 
-    public void updateNotice(String title, String body, String imageUrl, LocalDateTime boardStartDate, LocalDateTime boardEndDate){
+    public void updateNotice(String title, String body, LocalDateTime boardStartDate, LocalDateTime boardEndDate){
         LocalDateTime now = LocalDateTime.now();
         this.title = title;
         this.body = body;
-        this.imageUrl = imageUrl;
-        this.lastModifiedDate = now;
         this.boardStartDate = boardStartDate;
         this.boardEndDate = boardEndDate;
+        this.lastModifiedDate = now;
     }
 
+    public void updateImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
 }

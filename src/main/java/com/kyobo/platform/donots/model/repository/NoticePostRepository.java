@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
 
-    NoticePost findByNoticePostKey(Long noticePostKey);
     Page<NoticePost> findAllByOrderByCreatedDateDesc(Pageable pageable);
     Page<NoticePost> findByTitleContainingOrBodyContainingOrderByCreatedDateDesc(String searchTitle, String searchBody, Pageable pageable);
 }

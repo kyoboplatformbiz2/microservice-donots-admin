@@ -1,5 +1,6 @@
 package com.kyobo.platform.donots.controller;
 
+import com.kyobo.platform.donots.common.exception.RequestBodyEmptyException;
 import com.kyobo.platform.donots.model.dto.request.NoticeRequest;
 import com.kyobo.platform.donots.model.dto.response.NoticeListResponse;
 import com.kyobo.platform.donots.model.dto.response.NoticeResponse;
@@ -11,15 +12,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/noAuth")
@@ -36,12 +40,14 @@ public class NoticeController {
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
-    public ResponseEntity noticeRegedit (@RequestBody @Valid NoticeRequest noticeRequest) throws IOException {
-        Long result = noticeService.noticeRegedit(noticeRequest);
+    public ResponseEntity noticeRegedit(NoticeRequest noticeRequest, MultipartFile multipartFile) throws IOException, DecoderException {
+
+        Long result = noticeService.noticeRegedit(noticeRequest, multipartFile);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{key}")
                 .buildAndExpand(result)
                 .toUri();
+
         return ResponseEntity.created(location).build();
     }
 
@@ -56,6 +62,7 @@ public class NoticeController {
         noticeService.deleteNotice(noticePostKey);
         return ResponseEntity.ok().build();
     }
+
     @PatchMapping("/v1/notice/post/{noticePostKey}")
     @Operation(summary = "공지사항 수정", description = "관리자 공지사항 게시판 수정")
     @ApiResponses(value = {
@@ -63,8 +70,8 @@ public class NoticeController {
             @ApiResponse(responseCode = "403", description = "권한이 없습니다."),
             @ApiResponse(responseCode = "500", description = "실패")
     })
-    public ResponseEntity updateNotice(@PathVariable("noticePostKey") Long noticePostKey, @RequestBody @Valid NoticeRequest noticeRequest) {
-        noticeService.updateNotice(noticePostKey, noticeRequest);
+    public ResponseEntity updateNotice(@PathVariable("noticePostKey") Long noticePostKey, NoticeRequest noticeRequest, MultipartFile multipartFile) throws DecoderException, IOException {
+        noticeService.updateNotice(noticePostKey, noticeRequest, multipartFile);
         return ResponseEntity.ok().build();
     }
 
@@ -93,5 +100,35 @@ public class NoticeController {
         NoticeListResponse response = noticeService.findNoticePostsFiltered(searchTerm, pageable);
 
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/v1/notice/{key}/image")
+    @Operation(summary = "공지사항 첨부 이미지 > 덮어쓰기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
+    public ResponseEntity<?> uploadNoticeImageToS3AndUpdateUrl(@PathVariable Long key, @RequestBody MultipartFile multipartFile) throws IOException, DecoderException {
+        if (multipartFile == null)
+            throw new RequestBodyEmptyException();
+
+        String imageUrl = noticeService.uploadNoticeImageToS3AndUpdateUrl(key, multipartFile);
+
+        Map<String, String> createdImageUrl = new HashMap<>();
+        createdImageUrl.put("imageUrl", imageUrl);
+        return new ResponseEntity(createdImageUrl, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/v1/notice/{key}/image")
+    @Operation(summary = "공지사항 첨부 이미지 > 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
+    public ResponseEntity<?> deleteNoticeImageFromS3AndUpdateUrl(@PathVariable Long key) throws IOException, DecoderException {
+        noticeService.deleteNoticeImageFromS3AndUpdateUrl(key);
+        return ResponseEntity.ok().build();
     }
 }
