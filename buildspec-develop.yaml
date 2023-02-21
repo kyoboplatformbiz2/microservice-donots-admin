@@ -11,7 +11,7 @@ phases:
       - chmod +x ./kubectl
       - mv ./kubectl /usr/local/bin/kubectl
       - mkdir ~/.kube
-      - aws eks --region ap-northeast-2 update-kubeconfig --name eks-test
+      - aws eks --region ap-northeast-2 update-kubeconfig --name donot-eks
       - echo ---------------------------------
   pre_build:
     commands:
