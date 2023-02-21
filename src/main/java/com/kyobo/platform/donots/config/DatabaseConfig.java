@@ -14,7 +14,7 @@ import java.net.InetAddress;
 
 
 @EnableJpaAuditing
-@Configuration
+//@Configuration
 @Slf4j
 public class DatabaseConfig  {
 
