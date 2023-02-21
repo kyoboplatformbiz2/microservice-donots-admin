@@ -1,9 +1,9 @@
 server:
   port : 9080
-spring :
-  profiles:
-    active:
-      dev
+#spring :
+#  profiles:
+#    active:
+#      dev
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://account-db.crfubebnxuuv.ap-northeast-2.rds.amazonaws.com:5432/donots_account
