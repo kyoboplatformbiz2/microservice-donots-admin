@@ -24,7 +24,7 @@ phases:
       - echo Building the Docker image...
       - echo $CODEBUILD_BUILD_NUMBER
       - echo ---------------------------------
-      - AWS_ECR_URI=677284563273.dkr.ecr.ap-northeast-2.amazonaws.com/donots-admin:latest-$CODEBUILD_BUILD_NUMBER
+      - AWS_ECR_URI=677284563273.dkr.ecr.ap-northeast-2.amazonaws.com/dev-admin-member:latest-$CODEBUILD_BUILD_NUMBER
       - echo $AWS_ECR_URI
       - echo ---------------------------------
       - docker build -t $AWS_ECR_URI .
