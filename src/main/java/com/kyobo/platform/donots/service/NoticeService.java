@@ -56,10 +56,10 @@ public class NoticeService {
         NoticePost foundNoticePost = noticePostRepository.save(noticePostRegedit(noticeRequest));
 
         // FIXME [TEST] S3 연동 후 주석 제거 및 이미지 업로드, 삭제 테스트
-//        if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드
-//            String uploadedImageUrl = uploadNoticeImageToS3AndUpdateUrl(foundNoticePost.getNoticePostKey(), multipartFile);
-//            foundNoticePost.updateImageUrl(uploadedImageUrl);
-//        }
+        if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드
+            String uploadedImageUrl = uploadNoticeImageToS3AndUpdateUrl(foundNoticePost.getNoticePostKey(), multipartFile);
+            foundNoticePost.updateImageUrl(uploadedImageUrl);
+        }
 
         // 홈 > 알림 API 호출 시작
         String recipeurl = loadProperty().getProperty("recipeurl");
@@ -73,11 +73,11 @@ public class NoticeService {
         newNoticePostNotifRequest.put("noti_target_user_key", "");                              // 알림 대상 회원키 (공지사항 알림에서는 사용되지 않음)
 
         // FIXME [TEST] 테스트를 위해 레시피 호출 중단
-//        JSONObject newNoticePostNotifResponse = new HttpConfig().callApi(newNoticePostNotifRequest, url, HttpMethod.POST.name());
-//        String newNoticePostNotifResponseValue = (String) newNoticePostNotifResponse.get("databody");
-//        log.info("newNoticePostNotifResponseValue: "+ newNoticePostNotifResponseValue);
-//        if (!newNoticePostNotifResponseValue.isEmpty())
-//            throw new DefaultException("Recipe API 처리시 오류 발생");
+        JSONObject newNoticePostNotifResponse = new HttpConfig().callApi(newNoticePostNotifRequest, url, HttpMethod.POST.name());
+        String newNoticePostNotifResponseValue = (String) newNoticePostNotifResponse.get("databody");
+        log.info("newNoticePostNotifResponseValue: "+ newNoticePostNotifResponseValue);
+        if (!newNoticePostNotifResponseValue.isEmpty())
+            throw new DefaultException("Recipe API 처리시 오류 발생");
         // 홈 > 알림 API 호출 끝
 
         return foundNoticePost.getNoticePostKey();
@@ -125,17 +125,17 @@ public class NoticeService {
         foundNoticePost.updateNotice(noticeRequest.getTitle(), noticeRequest.getBody(), noticeRequest.getBoardStartDate(), noticeRequest.getBoardEndDate());
 
         // FIXME [TEST] S3 연동 후 주석 제거 및 이미지 업로드, 삭제 테스트
-//        if (noticeRequest.getIsAttachedImageFileChanged()) {    // 클라이언트에서 첨부파일이 변경된 적이 있고,
-//            if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드(교체)
-//                String uploadedImageUrl = uploadNoticeImageToS3AndUpdateUrl(foundNoticePost.getNoticePostKey(), multipartFile);
-//                foundNoticePost.updateImageUrl(uploadedImageUrl);
-//            }
-//            // TODO 클라이언트에서 null을 제대로 넘겨주는지 확인 필요. 필드를 아예 안 넣는 것과 비교가 되어야 할 듯
-//            else {  // 첨부된 파일이 null이면 삭제
-//                deleteNoticeImageFromS3AndUpdateUrl(foundNoticePost.getNoticePostKey());
-//                foundNoticePost.updateImageUrl("");
-//            }
-//        }
+        if (noticeRequest.getIsAttachedImageFileChanged()) {    // 클라이언트에서 첨부파일이 변경된 적이 있고,
+            if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드(교체)
+                String uploadedImageUrl = uploadNoticeImageToS3AndUpdateUrl(foundNoticePost.getNoticePostKey(), multipartFile);
+                foundNoticePost.updateImageUrl(uploadedImageUrl);
+            }
+            // TODO 클라이언트에서 null을 제대로 넘겨주는지 확인 필요. 필드를 아예 안 넣는 것과 비교가 되어야 할 듯
+            else {  // 첨부된 파일이 null이면 삭제
+                deleteNoticeImageFromS3AndUpdateUrl(foundNoticePost.getNoticePostKey());
+                foundNoticePost.updateImageUrl("");
+            }
+        }
     }
 
     private NoticePost noticePostRegedit(NoticeRequest noticeRequest){

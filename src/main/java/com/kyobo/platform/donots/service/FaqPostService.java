@@ -69,10 +69,10 @@ public class FaqPostService {
         FaqPost foundFaqPost = faqPostRepository.saveAndFlush(faqPost);
 
         // FIXME [TEST] S3 연동 후 주석 제거 및 이미지 업로드, 삭제 테스트
-//        if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드
-//            String uploadedRepresentativeImgUrl = uploadRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey(), multipartFile);
-//            foundFaqPost.updateRepresentativeImgUrl(uploadedRepresentativeImgUrl);
-//        }
+        if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드
+            String uploadedRepresentativeImgUrl = uploadRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey(), multipartFile);
+            foundFaqPost.updateRepresentativeImgUrl(uploadedRepresentativeImgUrl);
+        }
 
         return foundFaqPost.getKey();
     }
@@ -83,17 +83,17 @@ public class FaqPostService {
         foundFaqPost.updateFaqPost(faqPostRequest);
 
         // FIXME [TEST] S3 연동 후 주석 제거 및 이미지 업로드, 삭제 테스트
-//        if (faqPostRequest.getIsAttachedImageFileChanged()) {    // 클라이언트에서 첨부파일이 변경된 적이 있고,
-//            if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드(교체)
-//                String uploadedImageUrl = uploadRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey(), multipartFile);
-//                foundFaqPost.updateRepresentativeImgUrl(uploadedImageUrl);
-//            }
-//            // TODO 클라이언트에서 null을 제대로 넘겨주는지 확인 필요. 필드를 아예 안 넣는 것과 비교가 되어야 할 듯
-//            else {  // 첨부된 파일이 null이면 삭제
-//                deleteRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey());
-//                foundFaqPost.updateRepresentativeImgUrl("");
-//            }
-//        }
+        if (faqPostRequest.getIsAttachedImageFileChanged()) {    // 클라이언트에서 첨부파일이 변경된 적이 있고,
+            if (multipartFile != null) {    // 첨부된 파일이 있으면 업로드(교체)
+                String uploadedImageUrl = uploadRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey(), multipartFile);
+                foundFaqPost.updateRepresentativeImgUrl(uploadedImageUrl);
+            }
+            // TODO 클라이언트에서 null을 제대로 넘겨주는지 확인 필요. 필드를 아예 안 넣는 것과 비교가 되어야 할 듯
+            else {  // 첨부된 파일이 null이면 삭제
+                deleteRepresentativeImgToS3AndUpdateUrl(foundFaqPost.getKey());
+                foundFaqPost.updateRepresentativeImgUrl("");
+            }
+        }
     }
 
     @Transactional
