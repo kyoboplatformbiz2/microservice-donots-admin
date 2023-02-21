@@ -14,7 +14,7 @@ RUN ./gradlew bootJAR
 FROM 677284563273.dkr.ecr.ap-northeast-2.amazonaws.com/babyfood/openjdk:latest
 COPY --from=builder build/libs/*.jar microservice-donots-admin-0.0.1-SNAPSHOT.jar
 
-EXPOSE 9090
+EXPOSE 9080
 
-ENTRYPOINT ["java", "-jar", "./microservice-donots-admin-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "./microservice-donots-admin-0.0.1-SNAPSHOT.jar"]
 #ENTRYPOINT ["sleep", "5000"]
