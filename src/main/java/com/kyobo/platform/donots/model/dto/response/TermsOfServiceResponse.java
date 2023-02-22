@@ -26,7 +26,7 @@ public class TermsOfServiceResponse {
     @Schema(description = "등록자 ID")
     private String adminId;
 
-    @Schema(description = "등록자 ID")
+    @Schema(description = "약관본문 HTML URL")
     private String bodyHtmlFileUrl;
 
     @Schema(description = "게시시작일시")

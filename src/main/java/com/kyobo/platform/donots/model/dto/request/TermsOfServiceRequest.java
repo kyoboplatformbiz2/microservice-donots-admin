@@ -29,7 +29,7 @@ public class TermsOfServiceRequest {
     @NotBlank
     private String adminId;
 
-    @Schema(description = "HTML 파일 URL")
+    @Schema(description = "약관본문 HTML URL")
     @NotBlank
     private String bodyHtmlFileUrl;
 
