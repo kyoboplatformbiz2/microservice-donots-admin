@@ -33,6 +33,7 @@ public class TermsOfServiceService {
                 .version(termsOfServiceRequest.getVersion())
                 // TODO [Session] 세션 처리 필요
                 .adminId("dummyAdminId")
+                .bodyHtmlFileUrl(termsOfServiceRequest.getBodyHtmlFileUrl())
                 .postingStartDatetime(termsOfServiceRequest.getPostingStartDatetime())
                 .postingEndDatetime(termsOfServiceRequest.getPostingEndDatetime())
                 .createdDatetime(now)

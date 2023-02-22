@@ -25,6 +25,7 @@ public class TermsOfService {
     private String body;
     private String version;
     private String adminId;
+    private String bodyHtmlFileUrl;
     private LocalDateTime postingStartDatetime;
     private LocalDateTime postingEndDatetime;
     private LocalDateTime createdDatetime;
@@ -35,6 +36,7 @@ public class TermsOfService {
         this.body = termsOfServiceRequest.getBody();
         this.version = termsOfServiceRequest.getVersion();
         this.adminId = termsOfServiceRequest.getAdminId();
+        this.bodyHtmlFileUrl = termsOfServiceRequest.getBodyHtmlFileUrl();
         this.postingStartDatetime = termsOfServiceRequest.getPostingStartDatetime();
         this.postingEndDatetime = termsOfServiceRequest.getPostingEndDatetime();
         this.lastModifiedDatetime = LocalDateTime.now();

@@ -29,6 +29,10 @@ public class TermsOfServiceRequest {
     @NotBlank
     private String adminId;
 
+    @Schema(description = "HTML 파일 URL")
+    @NotBlank
+    private String bodyHtmlFileUrl;
+
     @Schema(description = "게시 시작")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime postingStartDatetime;

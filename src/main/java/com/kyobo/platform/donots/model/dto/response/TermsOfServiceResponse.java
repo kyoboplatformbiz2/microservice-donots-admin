@@ -26,6 +26,9 @@ public class TermsOfServiceResponse {
     @Schema(description = "등록자 ID")
     private String adminId;
 
+    @Schema(description = "등록자 ID")
+    private String bodyHtmlFileUrl;
+
     @Schema(description = "게시시작일시")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime postingStartDatetime;
@@ -50,6 +53,7 @@ public class TermsOfServiceResponse {
         this.body = termsOfService.getBody();
         this.version = termsOfService.getVersion();
         this.adminId = termsOfService.getAdminId();
+        this.bodyHtmlFileUrl =termsOfService.getBodyHtmlFileUrl();
         this.postingStartDatetime = termsOfService.getPostingStartDatetime();
         this.postingEndDatetime = termsOfService.getPostingEndDatetime();
         this.createdDatetime = termsOfService.getCreatedDatetime();
