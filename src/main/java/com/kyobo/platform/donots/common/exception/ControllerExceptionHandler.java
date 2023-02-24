@@ -1,6 +1,5 @@
 package com.kyobo.platform.donots.common.exception;
 
-import com.amazonaws.services.organizations.model.ParentNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
