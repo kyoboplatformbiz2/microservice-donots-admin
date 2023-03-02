@@ -17,11 +17,11 @@ spring:
         rewriteBatchedStatements: true
   session:
     store-type: redis
-  redis:
-    host: donot-redis-ro.mpt7r0.ng.0001.apn2.cache.amazonaws.com
-#    host: localhost
-    port: 6379
-    database: 0
+#  redis:
+#    host: donot-redis-ro.mpt7r0.ng.0001.apn2.cache.amazonaws.com
+##    host: localhost
+#    port: 6379
+#    database: 0
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
