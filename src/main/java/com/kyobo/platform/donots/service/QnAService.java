@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,8 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class QnAService {
     private final QnARepository qnARepository;
-    private final HttpSession httpSession;
-
 
     public QnAListResponse getQnAList(QnAListRequest qnAListRequest, Pageable pageable) {
         Page<QnA> qnaPage;
@@ -36,6 +33,7 @@ public class QnAService {
         if (qnAListRequest.getStart() != null)
             start = convertStringForLocalDateTime(qnAListRequest.getStart());
         if (qnAListRequest.getEnd() != null)
+
             end = convertStringForLocalDateTime(qnAListRequest.getEnd());
 
         log.info("search" + search + ", start" + start + ", end" + end + ", pageable" + pageable);
@@ -58,8 +56,7 @@ public class QnAService {
         return new QnAListResponse(qnAListResponseList, qnaPage.getTotalPages(), qnaPage.getTotalElements());
     }
 
-    public void qnAUpdate(QnAUpdateRequest qnAUpdateRequest) {
-        AdminUser myAdminUser = (AdminUser) httpSession.getAttribute("adminUser");
+    public void qnAUpdate(QnAUpdateRequest qnAUpdateRequest, AdminUser myAdminUser) {
         QnA qna = qnARepository.findById(qnAUpdateRequest.getKey()).get();
         if (qna == null) {
             throw new DataNotFoundException();

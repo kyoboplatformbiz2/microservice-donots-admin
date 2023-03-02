@@ -4,6 +4,7 @@ package com.kyobo.platform.donots.controller;
 import com.kyobo.platform.donots.model.dto.request.QnAListRequest;
 import com.kyobo.platform.donots.model.dto.request.QnAUpdateRequest;
 import com.kyobo.platform.donots.model.dto.response.QnAListResponse;
+import com.kyobo.platform.donots.model.entity.AdminUser;
 import com.kyobo.platform.donots.service.QnAService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
@@ -34,8 +36,9 @@ public class QnAController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public ResponseEntity<?> qnAUpdate(@RequestBody @Valid QnAUpdateRequest qnAUpdateRequest)  {
-        qnAService.qnAUpdate(qnAUpdateRequest);
+    public ResponseEntity<?> qnAUpdate(@RequestBody @Valid QnAUpdateRequest qnAUpdateRequest, HttpSession httpSession)  {
+        AdminUser myAdminUser = (AdminUser) httpSession.getAttribute("adminUser");
+        qnAService.qnAUpdate(qnAUpdateRequest, myAdminUser);
         return ResponseEntity.ok().build();
     }
 
