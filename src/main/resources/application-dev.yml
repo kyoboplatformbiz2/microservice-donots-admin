@@ -18,7 +18,7 @@ spring:
   session:
     store-type: redis
   redis:
-    host: donot-redis-001.mpt7r0.0001.apn2.cache.amazonaws.com:6379
+    host: donot-redis1.mpt7r0.ng.0001.apn2.cache.amazonaws.com:6379
 #    host: localhost
 #    port: 6379
     database: 0
