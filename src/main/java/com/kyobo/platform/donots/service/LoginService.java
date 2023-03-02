@@ -130,7 +130,8 @@ public class LoginService implements UserDetailsService {
         adminUser.updateSessionId(adminUser.getSessionId());
 
         httpSession.setAttribute("adminUser", adminUser);
-        log.info("After adminUser set: "+ (String) httpSession.getAttribute("adminUser"));
+        log.info("After adminUser set: "+ httpSession.getAttribute("adminUser"));
+        log.info("After adminUser set: "+ httpSession.getAttribute("adminUser").toString());
 
         return new AdminUserResponse(adminUser);
     }
