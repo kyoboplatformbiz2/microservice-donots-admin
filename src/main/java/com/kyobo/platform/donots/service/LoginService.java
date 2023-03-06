@@ -112,26 +112,14 @@ public class LoginService implements UserDetailsService {
 
     @Transactional
     public AdminUserResponse signIn(SignInRequest signInRequest) {
-        log.info("LoginService.signIn");
         AdminUser adminUser = adminUserRepository.findByAdminId(signInRequest.getAdminId());
-
-        log.info("Before if(adminUser == null)");
         if(adminUser == null)
             throw new AdminUserNotFoundException();
-
-        log.info("Before if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))");
         if(!encoder.matches(signInRequest.getPassword(), adminUser.getPassword()))
             throw new PasswordNotMatchException();
-
-        log.info("Before adminUser.increaseCount(adminUser.getLoginCount());");
         adminUser.increaseCount(adminUser.getLoginCount());
-
-        log.info("Before adminUser.updateSessionId(adminUser.getSessionId());");
         adminUser.updateSessionId(adminUser.getSessionId());
-
         httpSession.setAttribute("adminUser", adminUser);
-        log.info("After adminUser set: "+ httpSession.getAttribute("adminUser"));
-        log.info("After adminUser set: "+ httpSession.getAttribute("adminUser").toString());
 
         return new AdminUserResponse(adminUser);
     }
