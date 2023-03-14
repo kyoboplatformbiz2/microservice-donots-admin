@@ -5,6 +5,7 @@ import com.kyobo.platform.donots.common.exception.*;
 import com.kyobo.platform.donots.model.dto.request.*;
 import com.kyobo.platform.donots.model.dto.response.*;
 import com.kyobo.platform.donots.model.entity.AdminUser;
+import com.kyobo.platform.donots.model.entity.service.account.RoleType;
 import com.kyobo.platform.donots.model.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
@@ -34,11 +36,35 @@ import java.util.stream.Collectors;
 public class LoginService implements UserDetailsService {
     private final AdminUserRepository adminUserRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
     private final HttpSession httpSession;
 
-    public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest) {
-        AdminUser myAdminUser = (AdminUser) httpSession.getAttribute("adminUser");
+    @PostConstruct
+    public void initialize(){
+        AdminUser adminUser = adminUserRepository.findByAdminId("superkyobo");
+        if(adminUser == null) {
+            LocalDateTime now = LocalDateTime.now();
+            adminUser = AdminUser.builder()
+                .adminId("superkyobo")
+                .password(encoder.encode("kyobo11!"))
+                .adminUserName("슈퍼유저")
+                .adminUserNumber("99999999")
+                .departmentName("플랫폼추진2팀")
+                .phoneNumber("010-1234-5678")
+                .regeditAdminId("superkyobo")
+                .email("kyobo@help.com")
+                .reasonsForAuthorization("")
+                .role("SUPER_ADMIN")
+                .attachImageUrl("")
+                .memo("")
+                .loginCount(0l)
+                .lastPasswordChangeDate(now)
+                .createdDate(now)
+                .lastSignInDate(now)
+                .build();
+            adminUserRepository.save(adminUser);
+        }
+    }
+    public AdminUserResponse createAdminUser(CreateAdminUserRequest createAdminUserRequest, AdminUser myAdminUser) {
 
         AdminUser adminUser = adminUserRepository.findByAdminId(createAdminUserRequest.getAdminId());
 
