@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import java.util.Map;
 public class SuperAdminController {
 
     private final LoginService loginService;
+
     @PostMapping("/v1/admin-user")
     @Operation(summary = "관리자 생성", description = "")
     @ApiResponses(value = {
@@ -37,8 +40,10 @@ public class SuperAdminController {
             @ApiResponse(responseCode = "1000", description = "이미 가입된 아이디입니다."),
             @ApiResponse(responseCode = "4000", description = "파라메터 인자값이 정상적이지 않습니다.")
     })
-    public ResponseEntity createAdminUser(@RequestBody @Valid CreateAdminUserRequest createAdminUserRequest) {
-        AdminUserResponse adminUserResponse = loginService.createAdminUser(createAdminUserRequest);
+    public ResponseEntity createAdminUser(@RequestBody @Valid CreateAdminUserRequest createAdminUserRequest, HttpSession httpSession) {
+        AdminUser myAdminUser = (AdminUser) httpSession.getAttribute("adminUser");
+
+        AdminUserResponse adminUserResponse = loginService.createAdminUser(createAdminUserRequest, myAdminUser);
         return new ResponseEntity(adminUserResponse, HttpStatus.CREATED);
     }
 
